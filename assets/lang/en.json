@@ -1,0 +1,30 @@
+{
+  "appname": "School Bus Tracker",
+  "getstarted": "GET STARTED!",
+  "donthaveanaccount" : "Don't have an account?",
+  "signinhere": "Sign in here",
+  "signin": "Sign in",
+  "signin": "Sign in ",
+  "emaillabel": "E-mail",
+  "passwordlabel": "Password",
+  "remember": "Remember",
+  "forgotpassword": "Forgot Password",
+  "loginsuccessful" : "Login Successful",
+  "invalidemailpassword": "Invalid Email or Password.",
+  "dashboard": "Dashboard",
+  "profile": "Profile",
+  "location": "Locatioin",
+  "sos": "SOS",
+  "chat": "Chat",
+  "information": "Information",
+  "transport": "transport",
+  "namelabel": "Name",
+  "phonelabel": "Phone",
+  "licenselabel": "License",
+  "routelabel": "Available Routes",
+  "startlabel": "Start Travel",
+  "buslabel": "Bus",
+  "statuslabel": "Status"
+
+
+}
