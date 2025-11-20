@@ -117,7 +117,7 @@ class _DriverScreenState extends State<Driverprofile> {
                     top: 50,
                     child: Align(
                       alignment: Alignment.topCenter,
-                      child: Text(userData!['name'], style: theme.textTheme.titleLarge?.copyWith(color: Colors.white, fontSize: 25)),
+                      child: Text(userData?['name']??"", style: theme.textTheme.titleLarge?.copyWith(color: Colors.white, fontSize: 25)),
                     ),
                   ),
                   // Avatar floating
@@ -153,17 +153,17 @@ class _DriverScreenState extends State<Driverprofile> {
                   children: [
                     Row(
                       children:  [
-                        Expanded(child: _InfoItem(label: "namelabel".tr(), value: userData!['name'])),
+                        Expanded(child: _InfoItem(label: "namelabel".tr(), value: userData?['name']??"")),
                         SizedBox(width: 26),
-                        Expanded(child: _InfoItem(label: "phonelabel".tr(), value: "${userData!['user_data']['phone']}")),
+                        Expanded(child: _InfoItem(label: "phonelabel".tr(), value: "${userData?['user_data']?['phone']??""}")),
                       ],
                     ),
                     const SizedBox(height: 18),
                     Row(
                       children: [
-                        Expanded(child: _InfoItem(label: "licenselabel".tr(), value: "${userData!['user_data']['license_no']}"),),
+                        Expanded(child: _InfoItem(label: "licenselabel".tr(), value: "${userData?['user_data']?['license_no']??""}"),),
                         SizedBox(width: 26),
-                        Expanded(child: _InfoItem(label: "emaillabel".tr(), value: "${userData!['user_data']['email']}"),),
+                        Expanded(child: _InfoItem(label: "emaillabel".tr(), value: "${userData?['user_data']?['email']??""}"),),
                       ],
                     ),
 
@@ -209,7 +209,7 @@ class _DriverScreenState extends State<Driverprofile> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text("statuslabel".tr() + ": "),
-                                Text("buslabel".tr() + ": ${bus["bus_name"]}"),
+                                Text("buslabel".tr() + ": ${bus['bus_name']??""}"),
                               ],
                             ),
                             trailing: ElevatedButton(

@@ -45,5 +45,30 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+
+
+	<key>NSUserNotificationAlertStyle</key>
+        <string>alert</string>
+        <key>NSLocationWhenInUseUsageDescription</key>
+        <string>This app uses notifications to keep you updated.</string>
+
+        <key>LSApplicationQueriesSchemes</key>
+        <array>
+          <string>comgooglemaps</string>
+        </array>
+
+        <key>FirebaseAppDelegateProxyEnabled</key>
+        <false/>
+        <key>NSUserTrackingUsageDescription</key>
+        <string>This identifier will be used to deliver personalized ads to you.</string>
+
+        <key>UNUserNotificationCenterDelegate</key>
+        <string>YES</string>
+
+        <key>io.flutter.embedded_views_preview</key>
+        <true/>
+
+        <key>NSLocationWhenInUseUsageDescription</key>
+        <string>This app needs access to your location.</string>
 </dict>
 </plist>
