@@ -1,7 +1,7 @@
 
 import 'package:trackora/Dashboard.dart';
 import 'package:trackora/GoogleMapExample.dart';
-import 'package:trackora/LiveMapScreen.dart';
+import 'package:trackora/students/LiveMapScreen.dart';
 import 'package:trackora/drivers/driverProfile.dart';
 import 'package:trackora/pages/SliderSwitchExample.dart';
 import 'package:trackora/profile.dart';
@@ -22,8 +22,8 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends State<SignInPage> {
   bool rememberMe = false;
 
-  final TextEditingController emailController = TextEditingController(text: "driver@gmail.com");
-  final TextEditingController passwordController = TextEditingController(text: '12345678');
+  final TextEditingController emailController = TextEditingController(text: "abid@trackora.ca");
+  final TextEditingController passwordController = TextEditingController(text: '123456');
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,7 @@ class _SignInPageState extends State<SignInPage> {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "signin".tr(),
+                  "Sign In".tr(),
                   style: const TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
@@ -69,7 +69,7 @@ class _SignInPageState extends State<SignInPage> {
                 controller: emailController,
 
                 decoration: InputDecoration(
-                  labelText: "emaillabel".tr(),
+                  labelText: "E-mail".tr(),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -84,7 +84,7 @@ class _SignInPageState extends State<SignInPage> {
                 controller: passwordController,
                 obscureText: true,
                 decoration: InputDecoration(
-                  labelText: "passwordlabel".tr(),
+                  labelText: "Password".tr(),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -109,7 +109,7 @@ class _SignInPageState extends State<SignInPage> {
                         },
                       ),
                       Text(
-                        "remember".tr(),
+                        "Remember".tr(),
                         style: TextStyle(fontSize: 16),
                       ),
                     ],
@@ -119,7 +119,7 @@ class _SignInPageState extends State<SignInPage> {
                       // TODO: Forgot password navigation
                     },
                     child: Text(
-                      "forgotpassword".tr(),
+                      "Forgot Password".tr(),
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.black,
@@ -162,7 +162,7 @@ class _SignInPageState extends State<SignInPage> {
 
                   },
                   child: Text(
-                    "signin".tr(),
+                    "Sign In".tr(),
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -194,5 +194,13 @@ class _SignInPageState extends State<SignInPage> {
         MaterialPageRoute(builder: (context) => Driverprofile() ),
       );
     }
+
+    if(data['role']=="student"){
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LiveMapScreen() ),
+      );
+    }
+
   }
 }

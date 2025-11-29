@@ -11,19 +11,19 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 
-import 'GoogleMapExample.dart';
-import 'Tracker.dart';
-import 'helpers/DialogManager.dart';
-import 'helpers/GeoFence.dart';
-import 'helpers/ToastHelper.dart';
-import 'helpers/getCurrentLocation.dart';
-import 'helpers/getDistanceAndTime.dart';
-import 'helpers/getLatLngFromAddress.dart';
-import 'helpers/getRouteWithWaypoints.dart';
-import 'helpers/get_route_info_by_student_id.dart';
-import 'helpers/notification_service.dart';
-import 'helpers/sharedPref.dart';
-import 'helpers/sound_helper.dart';
+import '../GoogleMapExample.dart';
+import '../Tracker.dart';
+import '../helpers/DialogManager.dart';
+import '../helpers/GeoFence.dart';
+import '../helpers/ToastHelper.dart';
+import '../helpers/getCurrentLocation.dart';
+import '../helpers/getDistanceAndTime.dart';
+import '../helpers/getLatLngFromAddress.dart';
+import '../helpers/getRouteWithWaypoints.dart';
+import '../helpers/get_route_info_by_student_id.dart';
+import '../helpers/notification_service.dart';
+import '../helpers/sharedPref.dart';
+import '../helpers/sound_helper.dart';
 
 class _DashItem {
   final IconData icon;
@@ -375,7 +375,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
       appBar: AppBar(title: Row(
         children: [
           Image.asset(
-            "assets/logo.png", // your custom icon path
+            "assets/trackora_logo.png", // your custom icon path
             height: 28,
             width: 28,
           ), // your icon
@@ -640,7 +640,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
       // double lng = double.parse(locationJson!['longitude'].toString());
 
       //Set user default location getting form the database
-      userDefaultPickupLocation = LatLng(locationJson!['latitude'], locationJson!['longitude']);
+      userDefaultPickupLocation = LatLng(locationJson['latitude'], locationJson['longitude']);
 
       print("Debug - User default location: ${userDefaultPickupLocation}");
 

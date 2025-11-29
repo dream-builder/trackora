@@ -2,7 +2,7 @@
 import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:trackora/LiveMapScreen.dart';
+import 'package:trackora/students/LiveMapScreen.dart';
 import 'package:trackora/drivers/DriverLiveScreen.dart';
 import 'package:trackora/pages/LiveCarMap.dart';
 import 'package:flutter/material.dart';

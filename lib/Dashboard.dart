@@ -1,4 +1,4 @@
-import 'package:trackora/LiveMapScreen.dart';
+import 'package:trackora/students/LiveMapScreen.dart';
 import 'package:trackora/pages/SliderSwitchExample.dart';
 import 'package:trackora/pages/drawer.dart';
 import 'package:trackora/profile.dart';

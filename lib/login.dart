@@ -58,7 +58,7 @@ Future<bool> loginUser(String email, String password) async {
 
             // Show login success toast
             Fluttertoast.showToast(
-              msg: "loginsuccessful".tr(),
+              msg: "Login Successful".tr(),
               toastLength: Toast.LENGTH_SHORT, // or Toast.LENGTH_LONG
               gravity: ToastGravity.BOTTOM,    // TOP, CENTER, BOTTOM
               timeInSecForIosWeb: 1,
@@ -89,7 +89,7 @@ Future<bool> loginUser(String email, String password) async {
 
       if(jsonData['status']==false){
         Fluttertoast.showToast(
-          msg: "invalidemailpassword".tr(),
+          msg: "Invalid Email or Password".tr(),
           toastLength: Toast.LENGTH_LONG, // or Toast.LENGTH_LONG
           gravity: ToastGravity.CENTER,    // TOP, CENTER, BOTTOM
           timeInSecForIosWeb: 1,

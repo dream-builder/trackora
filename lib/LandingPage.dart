@@ -21,7 +21,7 @@ class LandingPage extends StatelessWidget {
               children: [
                 const SizedBox(height: 80),
                 Text(
-                    "appname".tr(),
+                    "School Bus Tracker".tr(),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 28,
@@ -68,7 +68,7 @@ class LandingPage extends StatelessWidget {
 
                     },
                     child: Text(
-                      "getstarted".tr(),
+                      "GET STARTED".tr(),
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -87,12 +87,12 @@ class LandingPage extends StatelessWidget {
                   child: Column(
                     children:  [
                       Text(
-                        "donthaveanaccount".tr(),
+                        "Don't have an account?".tr(),
                         style: TextStyle(color: Colors.black87),
                       ),
                       SizedBox(height: 4),
                       Text(
-                        "signinhere".tr(),
+                        "Sign in here".tr(),
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 18,

@@ -24,7 +24,7 @@ Future<void> main() async {
         supportedLocales: const [Locale('en'), Locale('bn')],
         path: 'assets/lang', // <-- your translation files path
         fallbackLocale: const Locale('en'),
-        startLocale: const Locale('bn'), // Default set to Bangla
+        startLocale: const Locale('en'), // Default set to English
         child: const MyApp(),
       ),
   );
