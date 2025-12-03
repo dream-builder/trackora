@@ -1,15 +1,17 @@
 {
   "School Bus Tracker": "School Bus Tracker",
+
   "GET STARTED": "GET STARTED!",
-  "Don't have an account?" : "Don't have an account?",
+  "Don't have an account?": "Don't have an account?",
   "Sign in here": "Sign in here",
   "Sign In": "Sign In",
   "E-mail": "E-mail",
   "Password": "Password",
   "Remember": "Remember",
   "Forgot Password": "Forgot Password",
-  "Login Successful" : "Login Successful",
+  "Login Successful": "Login Successful",
   "Invalid Email or Password": "Invalid Email or Password",
+
   "Dashboard": "Dashboard",
   "Profile": "Profile",
   "Location": "Location",
@@ -17,13 +19,65 @@
   "Chat": "Chat",
   "Information": "Information",
   "Transport": "Transport",
+
   "Name": "Name",
   "Phone": "Phone",
   "License": "License",
-  "Available Routes": "Available Routes",
-  "Start Travel": "Start Travel",
+  "Status": "Status",
+
   "Bus": "Bus",
-  "Status": "Status"
+  "Buses": "Buses",
+  "Bus Number": "Bus Number",
+  "Bus Model": "Bus Model",
+  "Bus Capacity": "Bus Capacity",
+  "Assigned Driver": "Assigned Driver",
 
+  "Driver": "Driver",
+  "Drivers": "Drivers",
+  "Driver List": "Driver List",
+  "Add Driver": "Add Driver",
+  "Edit Driver": "Edit Driver",
+  "Driver Details": "Driver Details",
+  "Driver Added Successfully": "Driver Added Successfully",
+  "Driver Updated Successfully": "Driver Updated Successfully",
 
+  "Student": "Student",
+  "Students": "Students",
+  "Student List": "Student List",
+  "Add Student": "Add Student",
+  "Edit Student": "Edit Student",
+  "Student Details": "Student Details",
+  "Student Added Successfully": "Student Added Successfully",
+  "Student Updated Successfully": "Student Updated Successfully",
+
+  "Route": "Route",
+  "Routes": "Routes",
+  "Route List": "Route List",
+  "Add Route": "Add Route",
+  "Edit Route": "Edit Route",
+  "Route Details": "Route Details",
+  "Available Routes": "Available Routes",
+  "Route Added Successfully": "Route Added Successfully",
+  "Route Updated Successfully": "Route Updated Successfully",
+
+  "Start Travel": "Start Travel",
+  "End Travel": "End Travel",
+  "Travel History": "Travel History",
+  "Current Location": "Current Location",
+
+  "Save": "Save",
+  "Update": "Update",
+  "Delete": "Delete",
+  "Cancel": "Cancel",
+  "Confirm": "Confirm",
+  "Are you sure?": "Are you sure?",
+  "Action Successful": "Action Successful",
+
+  "No Data Found": "No Data Found",
+  "Loading...": "Loading...",
+  "Something went wrong": "Something went wrong",
+
+  "Settings": "Settings",
+  "Logout": "Logout",
+  "Logout Successful": "Logout Successful"
 }
