@@ -25,11 +25,6 @@ import '../helpers/notification_service.dart';
 import '../helpers/sharedPref.dart';
 import '../helpers/sound_helper.dart';
 
-class _DashItem {
-  final IconData icon;
-  final String label;
-  const _DashItem({required this.icon, required this.label});
-}
 
 class _TwoColRow extends StatelessWidget {
   const _TwoColRow({required this.left, required this.right});
@@ -69,36 +64,6 @@ class _Info extends StatelessWidget {
   }
 }
 
-class _RoundAction extends StatelessWidget {
-  const _RoundAction({required this.icon, required this.label,  required this.onPressed,});
-  final IconData icon;
-  final String label;
-  final VoidCallback onPressed; // callback for button press
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            shape: BoxShape.circle,
-            border: Border.all(color: const Color(0xFFD9DCE3), width: 1.6),
-            boxShadow: const [
-              BoxShadow(color: Color(0x11000000), blurRadius: 8, offset: Offset(0, 2)),
-            ],
-          ),
-          child: Icon(icon, size: 16, color: Color(0xFF439AD7)), //color: TrackerApp.accent),
-        ),
-        const SizedBox(height: 6),
-        Text(label, style: const TextStyle(fontSize: 12, color: Colors.black54)),
-      ],
-    );
-  }
-}
-
 class LiveMapScreen extends StatefulWidget {
   @override
   _LiveMapScreenState createState() => _LiveMapScreenState();
@@ -108,7 +73,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
   GoogleMapController? _mapController;
   Marker? _marker;
   final Set<Marker> _markers = {};
-  LatLng _initialPosition = LatLng(23.8103, 90.4125); // Dhaka default
+  LatLng _initialPosition = LatLng(45.4631641, -73.4274669); // Dhaka default
   Timer? _timer;
   int _index = 2; // center tab selected
 
@@ -129,14 +94,6 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
 
   Set<Polyline> _polylines = {};
   Set<Circle> _circles = {};
-  // final List<_DashItem> _items = const [
-  //   _DashItem(icon: Icons.person, label: 'Profile'),
-  //   _DashItem(icon: Icons.location_pin, label: 'Location'),
-  //   _DashItem(icon: Icons.sos, label: 'SOS'),
-  //   _DashItem(icon: Icons.chat_bubble, label: 'Chat'),
-  //   _DashItem(icon: Icons.info, label: 'Info'),
-  //   _DashItem(icon: Icons.directions_bus_filled, label: 'Transport'),
-  // ];
 
   String _busName="";
   String _driverName="";
@@ -160,57 +117,22 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
     setState(() {});
   }
 
-
-
-  void _onItemClick(BuildContext context, String label) {
-    switch (label) {
-      case 'Profile':
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => ProfileScreen()),
-        );
-        break;
-      case 'Location':
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => GoogleMapExample()),
-        );
-        break;
-      case 'SOS':
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) =>LiveMapScreen()),
-        );
-        break;
-      case 'Chat':
-        Navigator.pushNamed(context, '/chat');
-        break;
-      case 'Info':
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Info Clicked")),
-        );
-        break;
-      case 'Transport':
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => TrackerApp()),
-        );
-        break;
-    }
-  }
-
   @override
   void initState() {
     super.initState();
 
+
+    //get login and user informaiton
+    init();
+
     //Load the routes by student id
-    get_route_by_student_id();
+    //get_route_by_student_id();
 
     //_loadCustomMarker();
-    _marker = Marker(
-      markerId: MarkerId("live_marker"),
-      position: _initialPosition,
-    );
+    // _marker = Marker(
+    //   markerId: MarkerId("live_marker"),
+    //   position: _initialPosition,
+    // );
     // Start fetching every 5 seconds
     _timer = Timer.periodic(Duration(seconds: 5), (timer) {
       _fetchAndUpdateMarker();
@@ -238,18 +160,6 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
       "route_id": "1",
     });
 
-
-    // final uri = Uri.http(
-    //   apiBaseUrl, // host
-    //   "api/livemaploc", // path
-    //   {
-    //     "user_id": "1",
-    //     "driver_id": "1",
-    //     "bus_id": "1",
-    //     "route_id": "1",
-    //   }, // query parameters
-    // );
-
     try {
       // Dummy API (replace with your real API)
       final response = await http.get(uri);
@@ -263,15 +173,15 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
         double lng = data["longitude"];
 
 
-        _getUserDefaultLocation();
+        //_getUserDefaultLocation();
 
         //Get the Distance and time
         _busLocation = LatLng(lat, lng); // Dhaka
-        _userLocation = LatLng(23.76806067045547, 90.41874745709367); // start
+        //_userLocation = LatLng(45.4631641, -73.4274669); // start
         //print(response.body);
 
         // User live location feature is disabled due to requirement
-         _userLiveLocation();
+        // _userLiveLocation();
 
          void fetchData() async {
           final result = await getDistanceAndTime(_busLocation!, _userLocation!);
@@ -470,11 +380,9 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          _routeName,
+                          "Route: "+ _routeName,
                           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                         ),
-                        SizedBox(width: 10), // spacing between label and switch
-
                       ],
                     ),
                     decoration: BoxDecoration(
@@ -486,7 +394,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
                         ),
                       ),
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 26),
 
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 22),
@@ -498,14 +406,16 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
                         ),
                         SizedBox(height: 14),
                         _TwoColRow(
-                          left: _Info(icon: Icons.directions_bus_filled, label: _busName, color: Colors.deepPurple,),
-                          right: _Info(icon: Icons.person_outline, label: _driverName, color: Colors.deepPurple,),
-                        ),
-                        SizedBox(height: 14),
-                        _TwoColRow(
-                          left: _Info(icon: Icons.badge_outlined, label: _busRegistrationNumber, color: Colors.deepPurple),
+                          left: _Info(icon: Icons.person_outline, label: _driverName, color: Colors.deepPurple,),
                           right: _Info(icon: Icons.call_outlined, label: _driverPhone, color: Colors.deepPurple),
+
                         ),
+                        SizedBox(height: 54),
+                        // _TwoColRow(
+                        //   left: _Info(icon: Icons.badge_outlined, label: _busRegistrationNumber, color: Colors.deepPurple),
+                        //   right: _Info(icon: Icons.directions_bus_filled, label: _busName, color: Colors.deepPurple,),
+                        //
+                        // ),
                         // _SectionDivider(),
                       ],
                     ),
@@ -615,16 +525,6 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
 
     print ("catch data ${data}");
 
-    // if (data.containsKey('pickup_point')) {
-    //   print("✅ pickup_point exists!");
-    //   print(data['pickup_point']);
-    // }
-    // else {
-    //   print("❌ pickup_point not found.");
-    // }
-    // print ("Test data ${data['pickup_point']}");
-
-
     setState(() {
       userData = data['user_data'];
 
@@ -645,14 +545,14 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
       print("Debug - User default location: ${userDefaultPickupLocation}");
 
       //load user icon
-      if(_useLiveLocation==false){
-        _addMarker(userDefaultPickupLocation!, title: "Student", markerId: "student",icon: 2);
-
-        //Showing GeoFence
-        _circles.add(
-          createGeofenceCircle(center: userDefaultPickupLocation!, radius: 300, id: "Student"),
-        );
-      }
+      // if(_useLiveLocation==false){
+      //   _addMarker(userDefaultPickupLocation!, title: "Student", markerId: "student",icon: 2);
+      //
+      //   //Showing GeoFence
+      //   _circles.add(
+      //     createGeofenceCircle(center: userDefaultPickupLocation!, radius: 300, id: "Student"),
+      //   );
+      // }
 
 
     });
@@ -736,30 +636,35 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
   //   }
   // }
 
-  Future<void> get_route_by_student_id() async {
+  Future<void> get_route_by_student_id(int student_id) async {
 
     LatLng start;  // Dhaka
     LatLng end;    // Destination
     List<LatLng> waypoints=[];
 
-    final result = await fetchRouteData(1); // Passing id=1 dynamically
+    final result = await fetchRouteData(student_id); // Passing id=1 dynamically
     var routeData = result["data"]["data"][0];
 
-    print("route data ${result}");
+    print("route data: ${routeData}");
 
     //When got route and return success it will load rout polyline
     if(result["code"]==200){
-
-      _routeName = routeData["route_name"];
-      _busName = routeData["bus_name"];
-      _driverName=routeData["driver_name"];
-      _busRegistrationNumber=routeData["bus_registration_number"];
-      _driverPhone=routeData["driver_phone"];
-
       final sourceLatLng = jsonDecode(routeData["source_latlng"]);
       final destinationLatLng = jsonDecode(routeData["destination_latlng"]);
       final waypoint = jsonDecode(routeData["route_waypoints"]);
 
+      //_initialPosition = LatLng(sourceLatLng.latitude, sourceLatLng.longitude);
+      _routeName = routeData["route_name"];
+      _busName = "";
+      _driverName=routeData["driver_name"];
+      _busRegistrationNumber="";
+      _driverPhone=routeData["driver_phone"];
+
+      var pikuppoints= jsonDecode(routeData["pickup_point"]);
+
+      userDefaultPickupLocation = LatLng(pikuppoints[0], pikuppoints[1]);
+      _userLocation = userDefaultPickupLocation;
+      print("pickup point ${pikuppoints[0]}");
 
       waypoint.forEach((wp){
         waypoints.add(LatLng((wp["lat"] as num).toDouble(), (wp["lng"] as num).toDouble()));
@@ -794,8 +699,16 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
           ));
 
           // load marker on map initialization of route
-          _addMarker(start, title: "Source Location");
-          _addMarker(end, title: "Destination Location");
+          //_addMarker(start, title: "Source Location");
+          //_addMarker(end, title: "Destination Location");
+
+          //Showing GeoFence
+          _circles.add(
+            createGeofenceCircle(center: userDefaultPickupLocation!, radius: 300, id: "Student"),
+          );
+
+          _addMarker(userDefaultPickupLocation!, title: routeData['name'], markerId: "student",icon: 2);
+
         });
 
       } catch (e) {
@@ -852,6 +765,20 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
     return BitmapDescriptor.defaultMarker;
 
 
+  }
+
+  Future<void> init() async {
+    //get login and user informaiton
+    Map<String, dynamic> data = await loadLoginData();
+
+    int student_id = data['user_data']['student_id'];
+
+    print ("student id ${student_id}");
+
+    //get student and route detail
+    get_route_by_student_id(student_id);
+
+    print("login user data: ${data['user_data']['student_id']}");
   }
 
 }

@@ -12,6 +12,7 @@ Future<Map<String, dynamic>> loadLoginData() async {
   String? pickupLat = prefs.getString("pickupPoint");
   String? role = prefs.getString("role");
   String? user_data = prefs.getString("user_data");
+
   //print("Shared saved");
   //print(pickupLat);
 
