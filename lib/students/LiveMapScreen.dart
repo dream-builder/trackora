@@ -103,6 +103,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
   bool showSidebar = false;
 
   void toggleSidebar() {
+    if (!mounted) return;  // prevents errors
     setState(() {
       showSidebar = !showSidebar;
     });
@@ -114,6 +115,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
       const ImageConfiguration(size: Size(48, 48)), // marker size
       'assets/school_bus.png',
     );
+    if (!mounted) return;  // prevents errors
     setState(() {});
   }
 
@@ -143,6 +145,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
 
   @override
   void dispose() {
+    print("dispose");
     _timer?.cancel();
     _mapController?.dispose();
     super.dispose();
@@ -186,7 +189,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
          void fetchData() async {
           final result = await getDistanceAndTime(_busLocation!, _userLocation!);
           print("Distance: ${result['distance']}, Duration: ${result['duration']}");
-
+          if (!mounted) return;  // prevents errors
           setState(() {
             // Update however you like (from API, DB, etc.)
             timeLabel = result['duration'];
@@ -212,6 +215,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
 
   // Step 2: Update marker on map
   Future<void> _updateMarker(LatLng newPosition) async {
+    if (!mounted) return;  // prevents errors
     setState(() {
 
       //Load school bus icon
@@ -524,7 +528,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
     Map<String, dynamic> data = await loadLoginData();
 
     print ("catch data ${data}");
-
+    if (!mounted) return;  // prevents errors
     setState(() {
       userData = data['user_data'];
 
@@ -689,6 +693,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
           googleApiKey: googleApiKey ,
         );
 
+        if (!mounted) return;  // prevents errors
         // Now use this route for Polyline
         setState(() {
           _polylines.add(Polyline(
@@ -734,7 +739,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
       infoWindow: InfoWindow(title: title),
       icon: customIcon, //BitmapDescriptor.defaultMarker,
     );
-
+    if (!mounted) return;  // prevents errors
     setState(() {
       _markers.add(marker);
     });
