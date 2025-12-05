@@ -2,6 +2,8 @@
 import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:trackora/SingInPage.dart';
+import 'package:trackora/login.dart';
 import 'package:trackora/students/LiveMapScreen.dart';
 import 'package:trackora/drivers/DriverLiveScreen.dart';
 import 'package:trackora/pages/LiveCarMap.dart';
@@ -16,10 +18,22 @@ import '../helpers/sharedPref.dart';
 class SafeGoApp extends StatelessWidget {
   const SafeGoApp({super.key});
 
-  static const Color header = Color(0xFF7587FF);
-  static const Color header2 = Color(0xFF8EA2FF);
-  static const Color accent = Color(0xFF1B1B1B);
+  // static const Color header = Color(0xFFE175FF);
+  // static const Color header2 = Color(0xFF8EA2FF);
+  // static const Color accent = Color(0xFF1B1B1B);
+  // static const Color canvas = Color(0xFFF2F3F5);
+
+  static const Color header = Color(0xFFFF6600);
+  static const Color header2 = Color(0xFFFF6600);
+  static const Color accent = Color(0xFFFF6600);
   static const Color canvas = Color(0xFFF2F3F5);
+
+
+  // static String DriverName="";
+  // static String DriverEmail="";
+  // static String DriverPhone="";
+  // static String DriverLicense="";
+  // static int DriverID;
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +67,7 @@ class Driverprofile extends StatefulWidget {
 }
 
 class _DriverScreenState extends State<Driverprofile> {
-  int _tab = 2;
+  int _tab =1; //select Nav bar Icon
 
   Map<String, dynamic>? userData;
 
@@ -64,7 +78,7 @@ class _DriverScreenState extends State<Driverprofile> {
   void initState() {
     super.initState();
     checkLoginData();
-    fetchrouteList(1);
+
 
 
     //routeList.add({"route": "Route D", "status": "On Time", "bus": "Bus 405"});
@@ -77,7 +91,11 @@ class _DriverScreenState extends State<Driverprofile> {
       userData = data;
 
       print("Saved Shared Preference");
-      //print ("User Data: ${userData}");
+      print ("User Data1: ${userData!['user_data']}");
+
+      //Loading route list
+      fetchrouteList(userData!['user_data']['driver_id']);
+
     });
   }
 
@@ -138,7 +156,7 @@ class _DriverScreenState extends State<Driverprofile> {
                         child: const CircleAvatar(
                           radius: 44,
                           backgroundColor: Color(0xFFF4F5F7),
-                          child: Icon(Icons.person, size: 56, color: Colors.black54),
+                          backgroundImage: AssetImage("assets/driver_profile.png"),
                         ),
                       ),
                     ),
@@ -153,17 +171,17 @@ class _DriverScreenState extends State<Driverprofile> {
                   children: [
                     Row(
                       children:  [
-                        Expanded(child: _InfoItem(label: "namelabel".tr(), value: userData?['name']??"")),
+                        Expanded(child: _InfoItem(label: "Name".tr(), value: userData?['name']??"")),
                         SizedBox(width: 26),
-                        Expanded(child: _InfoItem(label: "phonelabel".tr(), value: "${userData?['user_data']?['phone']??""}")),
+                        Expanded(child: _InfoItem(label: "Phone".tr(), value: "${userData?['user_data']?['driver_phone']??""}")),
                       ],
                     ),
                     const SizedBox(height: 18),
                     Row(
                       children: [
-                        Expanded(child: _InfoItem(label: "licenselabel".tr(), value: "${userData?['user_data']?['license_no']??""}"),),
+                        Expanded(child: _InfoItem(label: "License".tr(), value: "${userData?['user_data']?['driver_license_no']??""}"),),
                         SizedBox(width: 26),
-                        Expanded(child: _InfoItem(label: "emaillabel".tr(), value: "${userData?['user_data']?['email']??""}"),),
+                        Expanded(child: _InfoItem(label: "E-mail".tr(), value: "${userData?['user_data']?['email']??""}"),),
                       ],
                     ),
 
@@ -176,7 +194,7 @@ class _DriverScreenState extends State<Driverprofile> {
                           padding: const EdgeInsets.all(12),
                           alignment: Alignment.centerLeft,
                           child:  Text(
-                            "routelabel".tr(),
+                            "Route".tr(),
                             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -208,11 +226,12 @@ class _DriverScreenState extends State<Driverprofile> {
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("statuslabel".tr() + ": "),
-                                Text("buslabel".tr() + ": ${bus['bus_name']??""}"),
+                                Text("Status".tr() + ": "),
+
                               ],
                             ),
                             trailing: ElevatedButton(
+                              style: ElevatedButton.styleFrom(backgroundColor: Color(0xFFFF6600) ), //Colors.blueAccent
                               onPressed: () async {
 
                                 //set route id to shared pref
@@ -234,7 +253,7 @@ class _DriverScreenState extends State<Driverprofile> {
 
 
                               },
-                              child: Text("startlabel".tr()),
+                              child: Text("Start Travel".tr(),style:TextStyle(color:Colors.white)),
                             ),
                           ),
                         );
@@ -247,21 +266,46 @@ class _DriverScreenState extends State<Driverprofile> {
           ),
         ),
       ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _tab,
-        onDestinationSelected: (i) {
-          setState(() => _tab = i);
-          _onBottomNavClick(context, i);  // ✅ handle click here
-        },
-        height: 64,   // ✅ handle click here
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: ''),
-          NavigationDestination(icon: Icon(Icons.person_outline), selectedIcon: Icon(Icons.person), label: ''),
-          NavigationDestination(icon: Icon(Icons.dashboard_customize_outlined), selectedIcon: Icon(Icons.dashboard), label: ''),
-          NavigationDestination(icon: Icon(Icons.apps_outlined), selectedIcon: Icon(Icons.apps), label: ''),
-          NavigationDestination(icon: Icon(Icons.location_on_outlined), selectedIcon: Icon(Icons.location_on), label: ''),
-        ],
-      ),
+        bottomNavigationBar: NavigationBarTheme(
+          data: NavigationBarThemeData(
+            height: 56, // reduce bottom bar height
+            labelBehavior: NavigationDestinationLabelBehavior.alwaysHide, // remove labels
+          ),
+          child: NavigationBar(
+            backgroundColor: Color(0xB2FF6600),
+            selectedIndex: _tab,
+            onDestinationSelected: (i) {
+              setState(() => _tab = i);
+            },
+            destinations: const [
+              NavigationDestination(
+                icon: Icon(Icons.home_outlined),
+                selectedIcon: Icon(Icons.home),
+                label: '',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.person_outline),
+                selectedIcon: Icon(Icons.person),
+                label: '',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.dashboard_customize_outlined),
+                selectedIcon: Icon(Icons.dashboard),
+                label: '',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.apps_outlined),
+                selectedIcon: Icon(Icons.apps),
+                label: '',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.location_on_outlined),
+                selectedIcon: Icon(Icons.location_on),
+                label: '',
+              ),
+            ],
+          ),
+        )
     );
   }
 
@@ -270,7 +314,7 @@ class _DriverScreenState extends State<Driverprofile> {
       case 0:
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => DashboardScreen()),
+          MaterialPageRoute(builder: (context) => SignInPage()),
         );
         break;
       case 1:

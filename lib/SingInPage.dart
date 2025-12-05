@@ -22,8 +22,8 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends State<SignInPage> {
   bool rememberMe = false;
 
-  final TextEditingController emailController = TextEditingController(text: "saifan@trackora.ca");
-  final TextEditingController passwordController = TextEditingController(text: '123456');
+  final TextEditingController emailController = TextEditingController(text: ""); //thomas@trackora.ca
+  final TextEditingController passwordController = TextEditingController(text: ''); //123456
 
   @override
   Widget build(BuildContext context) {

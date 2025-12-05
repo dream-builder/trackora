@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:ffi' hide Size;
+import 'package:flutter/services.dart';
 import 'package:trackora/helpers/ToastHelper.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -69,7 +70,7 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
   LatLng _initialPosition = initialPosition; //From config
   LatLng _lastPosition = initialPosition;
   Timer? _timer;
-  int _index = 2; // center tab selected
+  int _tab = 2; // select navigation item in bottom
 
   LatLng? userDefaultPickupLocation;
   Map<String, dynamic>? userData;
@@ -214,8 +215,9 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
       for (var item in studentList) {
 
         var pickup_point = jsonDecode(item['pickup_point']);
-        LatLng pos = LatLng((pickup_point['latitude'] as num).toDouble(), (pickup_point['longitude']as num).toDouble());
+        LatLng pos = LatLng((pickup_point[0] as num).toDouble(), (pickup_point[1]as num).toDouble());
 
+        print ("student pos: ${pickup_point}");
         _addMarker(pos, title: "${item['name']}", markerId:"std${item['student_id']}",icon: 2);
 
       }
@@ -277,6 +279,15 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    // Set status bar icon brightness (dark icons)
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: Color(0xFFBB4D05), // OR same as AppBar
+        statusBarIconBrightness: Brightness.dark, // Android → dark icons
+        statusBarBrightness: Brightness.light, // iOS
+      ),
+    );
     return Scaffold(
       appBar: AppBar(title: Row(
         children: [
@@ -289,7 +300,8 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
           const Text("Driver Live", style: TextStyle(color: Colors.white)),
         ],
       ),
-        backgroundColor: Colors.blueGrey, // 👈 change color here
+        backgroundColor: Color(0xFFFF6600), // 👈 change color here
+        elevation: 0,
       ),
       body: SafeArea(child:
 
@@ -356,7 +368,7 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
                       title: Text("${studentList[index]['name']}"),
                       subtitle: Text("Status: ${studentList[index]['status']}"),
                       trailing: ElevatedButton(
-                        style: ElevatedButton.styleFrom(backgroundColor: Colors.blueAccent),
+                        style: ElevatedButton.styleFrom(backgroundColor: Color(0xFFFF6600) ), //Colors.blueAccent
                         onPressed: isEnabledPickup? () async {
                             //print ("student List ${studentList[index]}");
                             update_student_status(studentList[index]['student_id'], studentList[index]['name'],studentList[index]['status'] );
@@ -365,7 +377,7 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
                             studentList[index]['status']="check in";
 
                         }:null,
-                        child: Text("pickup".tr(),style:TextStyle(color:Colors.white)),
+                        child: Text("Pick-up".tr(),style:TextStyle(color:Colors.white)),
                       ),
                     );
                   },
@@ -380,19 +392,46 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
       )),
 
       // Bottom nav to match the theme
-      bottomNavigationBar: NavigationBar(
-
-        height: 64,
-        selectedIndex: _index,
-        onDestinationSelected: (i) => setState(() => _index = i),
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: ''),
-          NavigationDestination(icon: Icon(Icons.star_border), selectedIcon: Icon(Icons.star), label: ''),
-          NavigationDestination(icon: Icon(Icons.dashboard_customize_outlined), selectedIcon: Icon(Icons.dashboard), label: ''),
-          NavigationDestination(icon: Icon(Icons.notifications_none), selectedIcon: Icon(Icons.notifications), label: ''),
-          NavigationDestination(icon: Icon(Icons.location_on_outlined), selectedIcon: Icon(Icons.location_on), label: ''),
-        ],
-      ),
+        bottomNavigationBar: NavigationBarTheme(
+          data: NavigationBarThemeData(
+            height: 56, // reduce bottom bar height
+            labelBehavior: NavigationDestinationLabelBehavior.alwaysHide, // remove labels
+          ),
+          child: NavigationBar(
+            backgroundColor: Color(0xB2FF6600),
+            selectedIndex: _tab,
+            onDestinationSelected: (i) {
+              setState(() => _tab = i);
+            },
+            destinations: const [
+              NavigationDestination(
+                icon: Icon(Icons.home_outlined),
+                selectedIcon: Icon(Icons.home),
+                label: '',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.person_outline),
+                selectedIcon: Icon(Icons.person),
+                label: '',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.dashboard_customize_outlined),
+                selectedIcon: Icon(Icons.dashboard),
+                label: '',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.apps_outlined),
+                selectedIcon: Icon(Icons.apps),
+                label: '',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.location_on_outlined),
+                selectedIcon: Icon(Icons.location_on),
+                label: '',
+              ),
+            ],
+          ),
+        )
     );
   }
 

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:ffi' hide Size;
+import 'package:flutter/services.dart';
 import 'package:trackora/SingInPage.dart';
 import 'package:trackora/config/config.dart';
 import 'package:trackora/helpers/exitApp.dart';
@@ -73,7 +74,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
   GoogleMapController? _mapController;
   Marker? _marker;
   final Set<Marker> _markers = {};
-  LatLng _initialPosition = LatLng(45.4631641, -73.4274669); // Dhaka default
+  LatLng _initialPosition = initialPosition; //From config
   Timer? _timer;
   int _index = 2; // center tab selected
 
@@ -281,6 +282,15 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    // Set status bar icon brightness (dark icons)
+    // SystemChrome.setSystemUIOverlayStyle(
+    //   SystemUiOverlayStyle(
+    //     statusBarColor: Color(0xFFBB4D05), // OR same as AppBar
+    //     statusBarIconBrightness: Brightness.dark, // Android → dark icons
+    //     statusBarBrightness: Brightness.light, // iOS
+    //   ),
+    // );
     return Scaffold(
       appBar: AppBar(title: Row(
         children: [
