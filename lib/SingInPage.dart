@@ -21,6 +21,7 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage> {
   bool rememberMe = false;
+  bool isLoading = false; //Show / hide loader
 
   final TextEditingController emailController = TextEditingController(text: ""); //thomas@trackora.ca
   final TextEditingController passwordController = TextEditingController(text: ''); //123456
@@ -136,40 +137,59 @@ class _SignInPageState extends State<SignInPage> {
 
                 width: double.infinity,
                 height: 55,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.pink,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
+                child: // Sign In Button with Loading Overlay
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    // Actual Button
+                    SizedBox(
+                      width: double.infinity,
+                      height: 55,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.pink,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                        ),
+                        onPressed: isLoading
+                            ? null
+                            : () async {
+                          setState(() {
+                            isLoading = true;
+                          });
+
+                          String email = emailController.text.trim();
+                          String password = passwordController.text;
+
+                          if (await loginUser(email, password) == true) {
+                            await loadDashboard(context);
+                          }
+
+                          setState(() {
+                            isLoading = false;
+                          });
+                        },
+                        child: Text(
+                          "Sign In".tr(),
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                  onPressed: () async {
-                    // TODO: Sign In Logic
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => DashboardScreen()),
-                    // );
 
-                    String email = emailController.text.trim();
-                    String password = passwordController.text;
-
-                    if(await loginUser(email, password)== true){
-
-                      loadDashboard(context);
-
-
-                    }
-
-                  },
-                  child: Text(
-                    "Sign In".tr(),
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
+                    // Loading Indicator (visible only when loading = true)
+                    if (isLoading)
+                      const CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 2,
+                      ),
+                  ],
                 ),
+
               ),
             ],
           ),
