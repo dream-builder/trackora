@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:ffi' hide Size;
 import 'package:flutter/services.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:trackora/helpers/ToastHelper.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -63,6 +64,18 @@ class DriverliveScreen extends StatefulWidget {
   _DriverliveScreenState createState() => _DriverliveScreenState();
 }
 
+class NavStep {
+  final String instruction;
+  final LatLng position;
+  bool announced = false;
+  bool completed = false;
+
+  NavStep({
+    required this.instruction,
+    required this.position,
+  });
+}
+
 class _DriverliveScreenState extends State<DriverliveScreen> {
   GoogleMapController? _mapController;
   Marker? _schoolBusMarker;
@@ -97,6 +110,12 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
   bool _isLoading = true;
 
   double carBearing = 0;
+  double _currentZoom = 16.0; // default zoom
+
+  final FlutterTts _tts = FlutterTts();
+  List<NavStep> _steps = [];
+  int _currentStepIndex = 0;
+
 
   /// Load image from assets and convert to BitmapDescriptor
   // Future<void> _loadCustomMarker() async {
@@ -107,12 +126,18 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
   //   setState(() {});
   // }
 
+  void initTTS() {
+    _tts.setLanguage("en-US");
+    _tts.setSpeechRate(0.9);
+    _tts.setVolume(1.0);
+  }
+
   @override
   void initState() {
     super.initState();
 
     load_bootstrap_data();
-
+    initTTS();
 
     //_loadCustomMarker();
     // _marker = Marker(
@@ -247,6 +272,7 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
       _addMarker(newPosition, title: "School Bus", markerId:"school-bus",icon: 4);
 
 
+
       //print("All markers: ${_markers[MarkerId("school-bus")]}");
       //var distance = calculateDistance(newPosition.latitude, newPosition.longitude, _userLocation!.latitude, _userLocation!.longitude) * 1000 ;
 
@@ -264,9 +290,56 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
 
     });
 
+    // 🚀 Move camera OUTSIDE setState (required!)
+    print("moving camera to $_mapController");
 
+    await _mapController?.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: newPosition,
+          zoom: _currentZoom,
+          bearing: carBearing,
+          tilt: 0,   // set 0 if map is rotated
+        ),
+      ),
+    );
 
   }
+
+  Future<void> animateCameraSmoothly({
+    required LatLng from,
+    required LatLng to,
+    required double zoom,
+    required double bearing,
+    Duration duration = const Duration(seconds: 5),
+  }) async {
+    final int frames = 60; // smooth frames
+    final int totalTicks = frames * duration.inSeconds;
+
+    for (int i = 0; i <= totalTicks; i++) {
+      await Future.delayed(
+        Duration(milliseconds: (duration.inMilliseconds ~/ totalTicks)),
+      );
+
+      final double t = i / totalTicks;
+
+      // Linear interpolation
+      final double lat = from.latitude + (to.latitude - from.latitude) * t;
+      final double lng = from.longitude + (to.longitude - from.longitude) * t;
+
+      await _mapController?.moveCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: LatLng(lat, lng),
+            zoom: zoom,
+            bearing: bearing,
+            tilt: 0,
+          ),
+        ),
+      );
+    }
+  }
+
 
   // Step 3: Combine API call + update marker
   void _fetchAndUpdateMarkerDemo() async {
@@ -288,6 +361,100 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
         statusBarBrightness: Brightness.light, // iOS
       ),
     );
+    const String _googleDriveMapStyle = '''
+[
+  {
+    "featureType": "all",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      { "color": "#ffffff" }
+    ]
+  },
+  {
+    "featureType": "all",
+    "elementType": "labels.text.stroke",
+    "stylers": [
+      { "color": "#000000" },
+      { "lightness": 13 }
+    ]
+  },
+  {
+    "featureType": "administrative",
+    "elementType": "geometry.fill",
+    "stylers": [
+      { "color": "#000000" }
+    ]
+  },
+  {
+    "featureType": "administrative",
+    "elementType": "geometry.stroke",
+    "stylers": [
+      { "color": "#144b53" },
+      { "lightness": 14 },
+      { "weight": 1.4 }
+    ]
+  },
+  {
+    "featureType": "landscape",
+    "elementType": "all",
+    "stylers": [
+      { "color": "#08304b" }
+    ]
+  },
+  {
+    "featureType": "poi",
+    "elementType": "geometry",
+    "stylers": [
+      { "color": "#0c4152" },
+      { "lightness": 5 }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "geometry.fill",
+    "stylers": [
+      { "color": "#000000" }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "geometry.stroke",
+    "stylers": [
+      { "color": "#0b434f" },
+      { "lightness": 25 }
+    ]
+  },
+  {
+    "featureType": "road.arterial",
+    "elementType": "geometry.fill",
+    "stylers": [
+      { "color": "#000000" }
+    ]
+  },
+  {
+    "featureType": "road.local",
+    "elementType": "geometry.fill",
+    "stylers": [
+      { "color": "#000000" }
+    ]
+  },
+  {
+    "featureType": "transit",
+    "elementType": "all",
+    "stylers": [
+      { "color": "#146474" }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "all",
+    "stylers": [
+      { "color": "#021019" }
+    ]
+  }
+]
+''';
+
     return Scaffold(
       appBar: AppBar(title: Row(
         children: [
@@ -308,15 +475,22 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
       Stack(
         children: [
           GoogleMap(
+            onMapCreated: (controller) => _mapController = controller,
+            onCameraMove: (CameraPosition position) {
+              _currentZoom = position.zoom;   // store updated zoom level
+            },
             initialCameraPosition: CameraPosition(
               target: _initialPosition,
-              zoom: 13,
+              zoom: _currentZoom,
             ),
             //markers: _marker != null ? {_marker!} : {},
             markers: _markers,
             polylines: _polylines,
-            onMapCreated: (controller) => _mapController = controller,
+            //
+            // Map styling (NEW API)
+           // style: _googleDriveMapStyle,
             circles: _circles,
+
             trafficEnabled: trafficEnabled,
             // ✅ Show current location (blue dot)
             myLocationEnabled: true,
@@ -696,7 +870,15 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
 
       LatLng newPosition = LatLng((location['latitude'] as num).toDouble(), (location['longitude'] as num).toDouble());
 
-      _updateSchoolBusMarker(newPosition);
+      //_updateSchoolBusMarker(newPosition);
+
+      await animateCameraSmoothly(
+        from: _lastPosition,
+        to: newPosition,
+        zoom: _currentZoom,
+        bearing: carBearing,
+        duration: const Duration(seconds: 5),
+      );
 
     } catch (e) {
       print("Error: $e");
