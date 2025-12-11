@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:trackora/config/config.dart';
+import '../helpers/FlutterTTS.dart';
 import '../helpers/GeoFence.dart';
 import '../helpers/carDirection.dart';
 import '../helpers/getCurrentLocation.dart';
@@ -112,7 +113,7 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
   double carBearing = 0;
   double _currentZoom = 16.0; // default zoom
 
-  final FlutterTts _tts = FlutterTts();
+
   List<NavStep> _steps = [];
   int _currentStepIndex = 0;
 
@@ -126,11 +127,7 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
   //   setState(() {});
   // }
 
-  void initTTS() {
-    _tts.setLanguage("en-US");
-    _tts.setSpeechRate(0.9);
-    _tts.setVolume(1.0);
-  }
+
 
   @override
   void initState() {
@@ -303,6 +300,8 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
         ),
       ),
     );
+
+    speak("Saifan is waiting in 200 meters");
 
   }
 
