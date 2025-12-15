@@ -15,10 +15,11 @@ import 'package:url_launcher/url_launcher.dart';
 import '../GoogleMapExample.dart';
 import '../Tracker.dart';
 import '../helpers/DialogManager.dart';
+import '../helpers/FlutterTTS.dart';
 import '../helpers/GeoFence.dart';
 import '../helpers/ToastHelper.dart';
 import '../helpers/getCurrentLocation.dart';
-import '../helpers/getDistanceAndTime.dart';
+import '../helpers/getDistanceAndTime.dart' hide calculateDistance;
 import '../helpers/getLatLngFromAddress.dart';
 import '../helpers/getRouteWithWaypoints.dart';
 import '../helpers/get_route_info_by_student_id.dart';
@@ -227,6 +228,8 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
           "Bus Status",
           "Your bus will be reached to your location within 5 minutes!",
         );
+
+        speak("Your bus will be reached to your location within 5 minutes!");
         SoundHelper.playAlertSound();
         // FlutterRingtonePlayer.play(
         //   android: AndroidSounds.notification, // You can use alarm, ringtone, notification
@@ -316,7 +319,6 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
           SafeArea(
               child: Column(
                 children: [
-
                   Expanded(child: GoogleMap(
                     initialCameraPosition: CameraPosition(
                       target: _initialPosition,
@@ -327,7 +329,8 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
                     polylines: _polylines,
                     onMapCreated: (controller) => _mapController = controller,
                     circles: _circles,
-                  ),),
+                  ),
+                  ),
 
                   //const SizedBox(height: 18),
 
@@ -713,9 +716,10 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
           //_addMarker(end, title: "Destination Location");
 
           //Showing GeoFence
-          _circles.add(
-            createGeofenceCircle(center: userDefaultPickupLocation!, radius: 300, id: "Student"),
-          );
+          //Disable on demand
+          // _circles.add(
+          //   createGeofenceCircle(center: userDefaultPickupLocation!, radius: 300, id: "Student"),
+          // );
 
           _addMarker(userDefaultPickupLocation!, title: routeData['name'], markerId: "student",icon: 2);
 

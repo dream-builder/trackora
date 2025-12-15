@@ -54,6 +54,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_launcher_icons: ^0.14.1  # latest version
+  flutter_native_splash: ^2.4.0
 
 flutter_launcher_icons:             # <-- put this at root level
   android: true
@@ -90,6 +91,7 @@ flutter:
     - assets/car_top.png
     - assets/school_bus_top.png
     - assets/driver_profile.png
+    - assets/nav.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
@@ -116,3 +118,9 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: assets/trackora_logo.png
+  branding: assets/trackora_logo.png
+  android_gravity: fill        # <-- makes logo stretched to fill screen
+  ios_content_mode: scaleAspectFill

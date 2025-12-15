@@ -92,8 +92,7 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
   String timeLabel = "";
   String _routeName = "Route name";
   String distanceLabel = "";
-  String busLabel = "Baishakhi";
-  String personLabel = "Mr. XYZ";
+
 
   bool _useLiveLocation = false;
   LatLng? _busLocation;
@@ -111,12 +110,12 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
   bool _isLoading = true;
 
   double carBearing = 0;
-  double _currentZoom = 16.0; // default zoom
+  double _currentZoom = 13.0; // default zoom
 
 
   List<NavStep> _steps = [];
   int _currentStepIndex = 0;
-
+  bool isStarted = false;
 
   /// Load image from assets and convert to BitmapDescriptor
   // Future<void> _loadCustomMarker() async {
@@ -146,21 +145,6 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
     //***************************************
     //TIMER IS DISABLED TEPORARILY FOR TESTING. IN PRODUCTION IT WILL BE UNCOMENTED
 
-    // Start fetching every 5 seconds
-    _timer = Timer.periodic(Duration(seconds: timeOut), (timer) {
-
-      if(demoMode){
-        _fetchAndUpdateMarkerDemo();
-      }else{
-        //School bus live location
-        _updateSchoolBusPosition();
-      }
-
-    });
-
-
-
-
   }
 
   @override
@@ -169,6 +153,44 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
     _mapController?.dispose();
     super.dispose();
   }
+
+  void startTravle(){
+    setState(() {
+      isStarted = !isStarted;
+    });
+
+    if(isStarted){
+
+      //Zoom map to start Position
+        _mapController?.animateCamera(
+          CameraUpdate.newCameraPosition(
+             CameraPosition(
+              target: _initialPosition,
+              zoom: 16,
+            ),
+          ),
+        );
+
+      // Start fetching every 5 seconds
+      _timer = Timer.periodic(Duration(seconds: timeOut), (timer) {
+
+        if(demoMode){
+          _fetchAndUpdateMarkerDemo();
+        }else{
+          //School bus live location
+          _updateSchoolBusPosition();
+        }
+
+      });
+      print ("Travel Sart");
+    }else{
+      _timer?.cancel();
+      print ("Travel Stop");
+    }
+
+
+  }
+
 
   // Step 1: Fetch geo location from API
   Future<LatLng> _fetchLocationFromApi() async {
@@ -242,6 +264,11 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
         print ("student pos: ${pickup_point}");
         _addMarker(pos, title: "${item['name']}", markerId:"std${item['student_id']}",icon: 2);
 
+       // Showing GeoFence
+          _circles.add(
+            createGeofenceCircle(center: pos, radius: 100, id: "${item['name']}"),
+          );
+
       }
     });
 
@@ -266,7 +293,7 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
 
     setState(() {
 
-      _addMarker(newPosition, title: "School Bus", markerId:"school-bus",icon: 4);
+      _addMarker(newPosition, title: "School Bus", markerId:"school-bus",icon: 5);
 
 
 
@@ -559,6 +586,18 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
             },
           ),
 
+          Positioned(
+            top: 20,
+            left: 20,
+            child: FloatingActionButton(
+              backgroundColor: isStarted ? Colors.red : Colors.black,
+              onPressed: startTravle,
+              child:  Icon(
+                isStarted ? Icons.stop : Icons.play_arrow,
+                color: Colors.white,
+              ),
+            ),
+          ),
 
         ],
 
@@ -718,7 +757,7 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
           _initialPosition = start; //LatLng( (sourceLatLng["latitude"] as num).toDouble(), (sourceLatLng["longitude"] as num).toDouble());
 
           //load school bus icon in start location
-          _addMarker(_initialPosition!, title: "School Bus", markerId: "school-bus",icon: 4);
+          _addMarker(_initialPosition!, title: "School Bus", markerId: "school-bus",icon: 5);
 
           // Move/animate camera to new location
           _mapController?.animateCamera(
@@ -779,6 +818,13 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
         return await BitmapDescriptor.asset(
           const ImageConfiguration(size: Size(48, 48)), // optional size
           'assets/car_top.png',
+        );
+        break;
+
+      case 5:
+        return await BitmapDescriptor.asset(
+          const ImageConfiguration(size: Size(48, 48)), // optional size
+          'assets/nav.png',
         );
         break;
     }
