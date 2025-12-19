@@ -4,6 +4,7 @@ import 'dart:ffi' hide Size;
 import 'package:flutter/services.dart';
 import 'package:trackora/SingInPage.dart';
 import 'package:trackora/config/config.dart';
+import 'package:trackora/helpers/AppColors.dart';
 import 'package:trackora/helpers/exitApp.dart';
 import 'package:trackora/profile.dart';
 import 'package:flutter/material.dart';
@@ -295,24 +296,24 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
     //   ),
     // );
     return Scaffold(
-      appBar: AppBar(title: Row(
-        children: [
-          Image.asset(
-            "assets/trackora_logo.png", // your custom icon path
-            height: 28,
-            width: 28,
-          ), // your icon
-          const SizedBox(width: 8),
-          const Text("Live"),
-        ],
-      ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.menu),
-            onPressed: toggleSidebar,
-          ),
-        ],
-      ),
+      // appBar: AppBar(title: Row(
+      //   children: [
+      //     Image.asset(
+      //       "assets/trackora_logo.png", // your custom icon path
+      //       height: 28,
+      //       width: 28,
+      //     ), // your icon
+      //     const SizedBox(width: 8),
+      //     const Text("Live"),
+      //   ],
+      // ),
+      //   actions: [
+      //     IconButton(
+      //       icon: const Icon(Icons.menu),
+      //       onPressed: toggleSidebar,
+      //     ),
+      //   ],
+      // ),
       body:
       Stack(
         children: [
@@ -335,7 +336,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
                   //const SizedBox(height: 18),
 
                   Container(
-                    color: Colors.deepPurpleAccent,
+                    color: AppColors.student,// AppColors.studentAccent,
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
                     child: Row(
@@ -414,19 +415,19 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
                     child: Column(
                       children:  [
                         _TwoColRow(
-                          left: _Info(icon: Icons.access_time, label: timeLabel, color: Colors.deepPurple),
-                          right: _Info(icon: Icons.flag_outlined, label: distanceLabel, color: Colors.deepPurple),
+                          left: _Info(icon: Icons.access_time, label: timeLabel, color: AppColors.student),
+                          right: _Info(icon: Icons.flag_outlined, label: distanceLabel, color: AppColors.student),
                         ),
                         SizedBox(height: 14),
                         _TwoColRow(
-                          left: _Info(icon: Icons.person_outline, label: _driverName, color: Colors.deepPurple,),
-                          right: _Info(icon: Icons.call_outlined, label: _driverPhone, color: Colors.deepPurple),
+                          left: _Info(icon: Icons.person_outline, label: _driverName, color: AppColors.student,),
+                          right: _Info(icon: Icons.call_outlined, label: _driverPhone, color: AppColors.student),
 
                         ),
                         SizedBox(height: 54),
                         // _TwoColRow(
-                        //   left: _Info(icon: Icons.badge_outlined, label: _busRegistrationNumber, color: Colors.deepPurple),
-                        //   right: _Info(icon: Icons.directions_bus_filled, label: _busName, color: Colors.deepPurple,),
+                        //   left: _Info(icon: Icons.badge_outlined, label: _busRegistrationNumber, color: AppColors.student),
+                        //   right: _Info(icon: Icons.directions_bus_filled, label: _busName, color: AppColors.student,),
                         //
                         // ),
                         // _SectionDivider(),
@@ -706,7 +707,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
         setState(() {
           _polylines.add(Polyline(
             polylineId: PolylineId("custom_route"),
-            color: Colors.purpleAccent,
+            color: AppColors.student,
             width: 6,
             points: route,
           ));

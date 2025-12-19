@@ -1,12 +1,15 @@
 
 import 'package:trackora/Dashboard.dart';
 import 'package:trackora/GoogleMapExample.dart';
+import 'package:trackora/controlers/StudentProfileController.dart';
+import 'package:trackora/layout/main_layout.dart';
 import 'package:trackora/students/LiveMapScreen.dart';
 import 'package:trackora/drivers/driverProfile.dart';
 import 'package:trackora/pages/SliderSwitchExample.dart';
 import 'package:trackora/profile.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:trackora/students/Profile.dart';
 
 
 import 'helpers/sharedPref.dart';
@@ -23,7 +26,7 @@ class _SignInPageState extends State<SignInPage> {
   bool rememberMe = false;
   bool isLoading = false; //Show / hide loader
 
-  final TextEditingController emailController = TextEditingController(text: "thomas@trackora.ca"); //thomas@trackora.ca
+  final TextEditingController emailController = TextEditingController(text: "saifan@trackora.ca"); //thomas@trackora.ca
   final TextEditingController passwordController = TextEditingController(text: '123456'); //123456
 
   @override
@@ -218,7 +221,7 @@ class _SignInPageState extends State<SignInPage> {
     if(data['role']=="student"){
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => LiveMapScreen() ),
+        MaterialPageRoute(builder: (context) => MainLayout() ),
       );
     }
 

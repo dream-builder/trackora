@@ -293,7 +293,7 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
 
     setState(() {
 
-      _addMarker(newPosition, title: "School Bus", markerId:"school-bus",icon: 5);
+      _addMarker(newPosition, title: "School Bus", markerId:"school-bus",icon: 4);
 
 
 
@@ -757,7 +757,7 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
           _initialPosition = start; //LatLng( (sourceLatLng["latitude"] as num).toDouble(), (sourceLatLng["longitude"] as num).toDouble());
 
           //load school bus icon in start location
-          _addMarker(_initialPosition!, title: "School Bus", markerId: "school-bus",icon: 5);
+          _addMarker(_initialPosition!, title: "School Bus", markerId: "school-bus",icon: 4);
 
           // Move/animate camera to new location
           _mapController?.animateCamera(
