@@ -1,7 +1,9 @@
 
+import 'package:provider/provider.dart';
 import 'package:trackora/pages/map_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:trackora/provider/AppBarTitleProvider.dart';
 import 'LandingPage.dart';
 import 'helpers/LoaderController.dart';
 import 'helpers/notification_service.dart';
@@ -25,7 +27,11 @@ Future<void> main() async {
         path: 'assets/lang', // <-- your translation files path
         fallbackLocale: const Locale('en'),
         startLocale: const Locale('en'), // Default set to English
-        child: const MyApp(),
+        //child: const MyApp(),
+        child: ChangeNotifierProvider(
+          create: (_) => AppBarTitleProvider(),
+          child: const MyApp(),
+        ),
       ),
   );
 

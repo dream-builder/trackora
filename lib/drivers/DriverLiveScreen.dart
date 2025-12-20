@@ -604,46 +604,46 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
       )),
 
       // Bottom nav to match the theme
-        bottomNavigationBar: NavigationBarTheme(
-          data: NavigationBarThemeData(
-            height: 56, // reduce bottom bar height
-            labelBehavior: NavigationDestinationLabelBehavior.alwaysHide, // remove labels
-          ),
-          child: NavigationBar(
-            backgroundColor: Color(0xB2FF6600),
-            selectedIndex: _tab,
-            onDestinationSelected: (i) {
-              setState(() => _tab = i);
-            },
-            destinations: const [
-              NavigationDestination(
-                icon: Icon(Icons.home_outlined),
-                selectedIcon: Icon(Icons.home),
-                label: '',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.person_outline),
-                selectedIcon: Icon(Icons.person),
-                label: '',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.dashboard_customize_outlined),
-                selectedIcon: Icon(Icons.dashboard),
-                label: '',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.apps_outlined),
-                selectedIcon: Icon(Icons.apps),
-                label: '',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.location_on_outlined),
-                selectedIcon: Icon(Icons.location_on),
-                label: '',
-              ),
-            ],
-          ),
-        )
+      //   bottomNavigationBar: NavigationBarTheme(
+      //     data: NavigationBarThemeData(
+      //       height: 56, // reduce bottom bar height
+      //       labelBehavior: NavigationDestinationLabelBehavior.alwaysHide, // remove labels
+      //     ),
+      //     child: NavigationBar(
+      //       backgroundColor: Color(0xB2FF6600),
+      //       selectedIndex: _tab,
+      //       onDestinationSelected: (i) {
+      //         setState(() => _tab = i);
+      //       },
+      //       destinations: const [
+      //         NavigationDestination(
+      //           icon: Icon(Icons.home_outlined),
+      //           selectedIcon: Icon(Icons.home),
+      //           label: '',
+      //         ),
+      //         NavigationDestination(
+      //           icon: Icon(Icons.person_outline),
+      //           selectedIcon: Icon(Icons.person),
+      //           label: '',
+      //         ),
+      //         NavigationDestination(
+      //           icon: Icon(Icons.dashboard_customize_outlined),
+      //           selectedIcon: Icon(Icons.dashboard),
+      //           label: '',
+      //         ),
+      //         NavigationDestination(
+      //           icon: Icon(Icons.apps_outlined),
+      //           selectedIcon: Icon(Icons.apps),
+      //           label: '',
+      //         ),
+      //         NavigationDestination(
+      //           icon: Icon(Icons.location_on_outlined),
+      //           selectedIcon: Icon(Icons.location_on),
+      //           label: '',
+      //         ),
+      //       ],
+      //     ),
+      //   )
     );
   }
 
