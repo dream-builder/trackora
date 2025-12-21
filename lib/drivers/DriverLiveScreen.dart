@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'dart:ffi' hide Size;
 import 'package:flutter/services.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:http/http.dart';
+import 'package:provider/provider.dart';
 import 'package:trackora/helpers/ToastHelper.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +22,8 @@ import '../helpers/get_route_info_by_student_id.dart';
 import '../helpers/notification_service.dart';
 import '../helpers/sharedPref.dart';
 import '../helpers/sound_helper.dart';
+import '../provider/AppBarTitleProvider.dart';
+
 
 class _TwoColRow extends StatelessWidget {
   const _TwoColRow({required this.left, required this.right});
@@ -134,6 +138,11 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
 
     load_bootstrap_data();
     initTTS();
+
+    // 🔔 Set title when page loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AppBarTitleProvider>().updateTitle("Bus Live".tr());
+    });
 
     //_loadCustomMarker();
     // _marker = Marker(
@@ -482,20 +491,20 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
 ''';
 
     return Scaffold(
-      appBar: AppBar(title: Row(
-        children: [
-          // Image.asset(
-          //   "assets/trackora_logo.png", // your custom icon path
-          //   height: 28,
-          //   width: 28,
-          // ), // your icon
-          // const SizedBox(width: 8),
-          const Text("Driver Live", style: TextStyle(color: Colors.white)),
-        ],
-      ),
-        backgroundColor: Color(0xFFFF6600), // 👈 change color here
-        elevation: 0,
-      ),
+      // appBar: AppBar(title: Row(
+      //   children: [
+      //     // Image.asset(
+      //     //   "assets/trackora_logo.png", // your custom icon path
+      //     //   height: 28,
+      //     //   width: 28,
+      //     // ), // your icon
+      //     // const SizedBox(width: 8),
+      //     const Text("Driver Live", style: TextStyle(color: Colors.white)),
+      //   ],
+      // ),
+      //   backgroundColor: Color(0xFFFF6600), // 👈 change color here
+      //   elevation: 0,
+      // ),
       body: SafeArea(child:
 
       Stack(

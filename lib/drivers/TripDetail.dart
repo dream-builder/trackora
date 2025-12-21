@@ -1,8 +1,17 @@
+import 'dart:convert';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
+import '../config/config.dart';
+import '../helpers/getRouteByID.dart';
+import '../helpers/getRouteWithWaypoints.dart';
+import '../helpers/sharedPref.dart';
 import '../provider/AppBarTitleProvider.dart';
+import '../provider/PageProvider.dart';
 
 class FieldTripPage extends StatefulWidget {
   const FieldTripPage({super.key});
@@ -12,6 +21,12 @@ class FieldTripPage extends StatefulWidget {
 }
 
 class _FieldTripPageState extends State<FieldTripPage> {
+
+  var routeData;
+  List<dynamic> stopPoints = [];
+  List<Map<String, String>> passengers = [];
+
+
   void initState() {
     // TODO: implement initState
     super.initState();
@@ -20,7 +35,128 @@ class _FieldTripPageState extends State<FieldTripPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<AppBarTitleProvider>().updateTitle("Trip Detail".tr());
     });
+
+    load_bootstrap_data();
+
   }
+
+  Future<void> get_route(int id) async {
+
+    List<LatLng> waypoints=[];
+    String _routeName = "Route name";
+
+    final result = await getRouteByID(id); // Passing id=1 dynamically
+
+
+    //When got route and return success it will load rout polyline
+    if(result["code"]==200){
+
+      setState(() {
+        routeData = result["data"]["data"][0];
+        //stopPoints=routeData['route_waypoints'];
+      });
+
+      print("route data ${routeData}");
+
+      _routeName = routeData["route_name"];
+
+      // final sourceLatLng = jsonDecode(routeData["source_latlng"]);
+      // final destinationLatLng = jsonDecode(routeData["destination_latlng"]);
+      // final waypoint = jsonDecode(routeData["route_waypoints"]);
+      //
+      // //print("Source lat: ${sourceLatLng}");
+      //
+      // waypoint.forEach((wp){
+      //   waypoints.add(LatLng((wp["lat"] as num).toDouble(), (wp["lng"] as num).toDouble()));
+      // });
+      //
+      // //print("waypoint");
+      // //print(waypoints);
+
+
+
+
+    }
+  }
+  Future<Map<String, dynamic>> get_student_by_route_id(int id) async {
+    const String url = "${apiBaseUrl}api/get_student_by_route_id"; // Replace with your API
+    final Map<String, String> params = {"route_id": id.toString()};
+
+
+    try {
+      final uri = Uri.parse(url).replace(queryParameters: params);
+      final response = await http.get(uri);
+      //print("ROute- ${uri}");
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        return {
+          "status": "success",
+          "code": 200,
+          "error": null,
+          "data": data
+        };
+      } else {
+        return {
+          "status": "error",
+          "code": response.statusCode,
+          "error": "Failed to fetch data",
+          "data": null
+        };
+      }
+    } catch (e) {
+      return {
+        "status": "error",
+        "code": 500,
+        "error": e.toString(),
+        "data": null
+      };
+    }
+  }
+  Future<void> get_student(int route_id) async {
+
+    final student = await get_student_by_route_id(route_id);
+    final data = student['data'];
+    List<Map<String, String>> passenger = [];
+
+    data.forEach((d){
+
+      print(d['name']);
+      passenger.add(
+        {
+          "student_id": d['student_id'].toString(),
+          "name":d['name']??'',
+          "phone":d['phone']??'123456'
+        }
+      );
+    });
+
+
+
+    setState(() {
+     passengers=passenger;
+    });
+
+
+    print("passengers : ${passenger}");
+
+  }
+
+  void load_bootstrap_data() async {
+    //set route id to shared pref
+    final route_id = await getSharedPref("route_id");
+
+    print("Route-id: ${route_id}");
+    //Load the routes by student id
+    get_route(route_id);
+
+    get_student(route_id);
+  }
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,21 +187,20 @@ class _FieldTripPageState extends State<FieldTripPage> {
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text(
-            "(#598) Field Trip",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          Text(
+            "(#${routeData?['id']??''}) ${routeData?['route_name']??''}",
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-            decoration: BoxDecoration(
-              color: Colors.orange.withOpacity(0.15),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: const Text(
-              "Assigned",
-              style: TextStyle(color: Colors.orange, fontSize: 12),
-            ),
-          )
+          ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+
+            onPressed: (){
+            context.read<PageProvider>().changePage(2); //Load Live screen index 2
+          },
+              child: const Text(
+                "Start Travel",
+                style: TextStyle(color: Colors.white, fontSize: 12),
+              ),),
+
         ],
       ),
     );
@@ -82,17 +217,23 @@ class _FieldTripPageState extends State<FieldTripPage> {
           _routeItem(
             color: Colors.green,
             title: "Pickup",
-            subtitle: "Jamuna Amusement Park, Pragati Sarani, Dhaka",
+            subtitle: "${routeData?['route_source']??''}",
           ),
-          _routeItem(
-            color: Colors.orange,
-            title: "Stop 1",
-            subtitle: "Bashundhara City Shopping Complex",
-          ),
+        // ✅ Multiple Stops (orange only)
+        ...stopPoints.asMap().entries.map((entry) {
+      final index = entry.key;
+      final stop = entry.value;
+
+      return _routeItem(
+        color: Colors.orange,
+        title: "Stop ${index + 1}",
+        subtitle: stop,
+      );
+    }),
           _routeItem(
             color: Colors.red,
             title: "Drop-off",
-            subtitle: "Gulshan Badda Link Road, Gulshan 1, Dhaka",
+            subtitle: "${routeData?['route_destination']??''}",
             isLast: true,
           ),
         ],
@@ -112,7 +253,7 @@ class _FieldTripPageState extends State<FieldTripPage> {
             children: [
               _infoItem("Pick Up Time", "09:00 AM", Icons.access_time),
               const SizedBox(width: 20),
-              _infoItem("Passengers", "4", Icons.people),
+              _infoItem("Passengers", "${passengers.length}", Icons.people),
             ],
           ),
         ],
@@ -142,42 +283,27 @@ class _FieldTripPageState extends State<FieldTripPage> {
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _title("Passenger Details (4)"),
+          _title("Passenger Details (${passengers.length})"),
           const SizedBox(height: 12),
-          const Text(
-            "Lead Passenger",
-            style: TextStyle(color: Colors.grey),
-          ),
-          const SizedBox(height: 6),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text(
-                    "Shohail Bin Saifullah",
-                    style: TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                  SizedBox(height: 4),
-                  Text("+880 1712-344678"),
-                ],
+
+          ...passengers.asMap().entries.map((entry) {
+            final index = entry.key;
+            final passenger = entry.value;
+
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: _passengerItem(
+                name: passenger['name'] ?? '',
+                phone: passenger['phone'] ?? '',
+                isLead: index == 0,
               ),
-              CircleAvatar(
-                backgroundColor: Colors.red,
-                child: IconButton(
-                  icon: const Icon(Icons.call, color: Colors.white),
-                  onPressed: () {
-                    // TODO: Call action
-                  },
-                ),
-              ),
-            ],
-          ),
+            );
+          }),
         ],
       ),
     );
   }
+
 
   // ---------------- Reusable Widgets ----------------
   Widget _card(Widget child) {
@@ -270,4 +396,47 @@ class _FieldTripPageState extends State<FieldTripPage> {
       ),
     );
   }
+
+  Widget _passengerItem({
+    required String name,
+    required String phone,
+    bool isLead = false,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Text(
+        //   // isLead ? "Lead Passenger" : "Passenger",
+        //   style: const TextStyle(color: Colors.grey),
+        // ),
+        const SizedBox(height: 6),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 4),
+                Text(phone),
+              ],
+            ),
+            CircleAvatar(
+              backgroundColor: Colors.red,
+              child: IconButton(
+                icon: const Icon(Icons.call, color: Colors.white),
+                onPressed: () {
+                  // TODO: Call passenger
+                },
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
 }

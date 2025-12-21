@@ -16,6 +16,7 @@ import 'package:trackora/students/Profile.dart';
 import '../helpers/AppColors.dart';
 import '../helpers/sharedPref.dart';
 import '../provider/AppBarTitleProvider.dart';
+import '../provider/PageProvider.dart';
 
 // import '../screens/map_screen.dart';
 // import '../screens/profile_screen.dart';
@@ -34,6 +35,8 @@ class _MainLayoutState extends State<MainLayout> {
   List<Widget> _pages = [];
   List<String> _titles=[];
   String _appBarTitle = "Trackora";
+
+  Color? _baseColor = AppColors.student;
 
   Widget _buildPage(int index) {
 
@@ -58,11 +61,13 @@ class _MainLayoutState extends State<MainLayout> {
         case 0:
           return  DriverProfilePage();
         case 1:
-          return  FieldTripPage();
+          return  FieldTripPage();;
         case 2:
           return  DriverliveScreen();
         case 3:
           return  SignInPage();
+        case 4:
+          return FieldTripPage();
         default:
           return  DriverProfilePage();
       }
@@ -76,6 +81,7 @@ class _MainLayoutState extends State<MainLayout> {
   void updateAppBarTitle(String title) {
     setState(() {
       _appBarTitle = title;
+
     });
   }
 
@@ -85,10 +91,14 @@ class _MainLayoutState extends State<MainLayout> {
     setState(() {
       user = profile;
 
-      
-      
+      //Chage base color
+      if(user?['role']=='student'){
+        _baseColor = AppColors.student;
+      }
 
-      //
+      if(user?['role']=='driver'){
+        _baseColor = AppColors.secondary;
+      }
 
       print("users: ${user}");
     });
@@ -157,6 +167,11 @@ class _MainLayoutState extends State<MainLayout> {
 
   @override
   Widget build(BuildContext context) {
+    final pageProvider = context.watch<PageProvider>();
+    if(pageProvider.currentIndex>0){
+      _currentIndex = pageProvider.currentIndex;
+    }
+
     return Scaffold(
       // 🔹 TITLE BAR
       //   AppBar(
@@ -169,7 +184,7 @@ class _MainLayoutState extends State<MainLayout> {
         title: Consumer<AppBarTitleProvider>(
                 builder: (_, provider, __) => Text(provider.title),
               ),
-        backgroundColor: AppColors.student,
+        backgroundColor: _baseColor,
         foregroundColor:Colors.white,
       ),
 
@@ -217,10 +232,10 @@ class _MainLayoutState extends State<MainLayout> {
             labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
             selectedIndex: _currentIndex,
             onDestinationSelected: (index) {
-
+              context.read<PageProvider>().changePage(0);
               if(index<=2){
                 setState(() => _currentIndex = index);
-                changeAppBarTitle(context, _titles[_currentIndex]);
+
               }
               else if(index == 3){
                 logout(context);

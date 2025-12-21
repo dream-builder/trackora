@@ -4,9 +4,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:trackora/drivers/TripDetail.dart';
 import '../config/config.dart';
 import '../helpers/sharedPref.dart';
 import '../provider/AppBarTitleProvider.dart';
+import '../provider/PageProvider.dart';
 import 'DriverLiveScreen.dart';
 
 class DriverProfilePage extends StatefulWidget {
@@ -163,9 +165,9 @@ class _DriverProfilePageState extends State<DriverProfilePage> {
   Widget _statsRow() {
     return Row(
       children: [
-        _statCard("12", "Total\nYears in Save"),
-        _statCard("20", "Total trips\ncompleted"),
-        _statCard("02", "Total\nDriven(km)"),
+        _statCard("12", "Years\nExperience"),
+        _statCard("20", "Trips\ncompleted"),
+        _statCard("02", "KM\nDriven(km)"),
       ],
     );
   }
@@ -213,7 +215,7 @@ class _DriverProfilePageState extends State<DriverProfilePage> {
       children: [
         _tabButton(Icons.person_outline, "Basic\nInformation", 0),
         _tabButton(Icons.badge_outlined, "License\nInformation", 1),
-        _tabButton(Icons.bar_chart_outlined, "Route\nInformation", 2),
+        _tabButton(Icons.route_outlined, "Route\nInformation", 2),
       ],
     );
   }
@@ -436,12 +438,14 @@ class _DriverProfilePageState extends State<DriverProfilePage> {
                 bool success = await setSharedPref("route_id", bus["route_id"]);
 
                 if (success) {
+
+                  context.read<PageProvider>().changePage(1);
                   //loading driver live activity
-                  Navigator.push(
-                    context,
-                    //_currentIndex=1
-                    MaterialPageRoute(builder: (context) => DriverliveScreen()),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   //_currentIndex=1
+                  //   MaterialPageRoute(builder: (context) => FieldTripPage()),
+                  // );
                 }else{
                   print("not saved");
                 }
