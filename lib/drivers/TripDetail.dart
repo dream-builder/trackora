@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../config/config.dart';
 import '../helpers/getRouteByID.dart';
@@ -119,7 +121,7 @@ class _FieldTripPageState extends State<FieldTripPage> {
     final student = await get_student_by_route_id(route_id);
     final data = student['data'];
     List<Map<String, String>> passenger = [];
-
+    final random = Random();
     data.forEach((d){
 
       print(d['name']);
@@ -127,7 +129,7 @@ class _FieldTripPageState extends State<FieldTripPage> {
         {
           "student_id": d['student_id'].toString(),
           "name":d['name']??'',
-          "phone":d['phone']??'123456'
+          "phone":d['phone']??random.nextInt(1837478).toString()
         }
       );
     });
@@ -154,6 +156,16 @@ class _FieldTripPageState extends State<FieldTripPage> {
     get_student(route_id);
   }
 
+  Future<void> makePhoneCall(String phoneNumber) async {
+    final Uri uri = Uri(scheme: 'tel', path: phoneNumber);
+
+    print("phone:${phoneNumber}");
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      throw 'Could not launch $phoneNumber';
+    }
+  }
 
 
 
@@ -430,6 +442,7 @@ class _FieldTripPageState extends State<FieldTripPage> {
                 icon: const Icon(Icons.call, color: Colors.white),
                 onPressed: () {
                   // TODO: Call passenger
+                  makePhoneCall(phone);
                 },
               ),
             ),
