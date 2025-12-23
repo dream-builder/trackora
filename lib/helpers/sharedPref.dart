@@ -12,6 +12,7 @@ Future<Map<String, dynamic>> loadLoginData() async {
   String? pickupLat = prefs.getString("pickupPoint");
   String? role = prefs.getString("role");
   String? user_data = prefs.getString("user_data");
+  bool? loginState = prefs.getBool("loginState");
 
   //print("Shared saved");
   //print(pickupLat);
@@ -45,6 +46,7 @@ Future<Map<String, dynamic>> loadLoginData() async {
     "token": token,
     "pickupPoint":pickupLat,
     "role":role,
+    "loginState":loginState,
     "user_data": userData
   };
 }

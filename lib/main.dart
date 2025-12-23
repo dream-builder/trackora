@@ -9,12 +9,10 @@ import 'LandingPage.dart';
 import 'helpers/LoaderController.dart';
 import 'helpers/notification_service.dart';
 import 'helpers/permission.dart';
+import 'helpers/sharedPref.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 Future<void> main() async {
-
-
-
   WidgetsFlutterBinding.ensureInitialized();
   await NotificationService.init();
   //Requesting Permission
@@ -106,6 +104,8 @@ class MyHomePage extends StatefulWidget {
   // always marked "final".
 
   final String title;
+
+
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();

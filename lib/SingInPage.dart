@@ -29,6 +29,30 @@ class _SignInPageState extends State<SignInPage> {
   final TextEditingController emailController = TextEditingController(text: "thomas@trackora.ca"); //thomas@trackora.ca
   final TextEditingController passwordController = TextEditingController(text: '123456'); //123456
 
+
+  Future<void> init() async {
+    Map<String, dynamic>?login = await loadLoginData();
+
+    if(login['loginState']){
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MainLayout()),
+      );
+    }
+    print("login test $login");
+  }
+
+  @override
+  void initState() {
+
+    init();
+
+    // TODO: implement initState
+    super.initState();
+
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
