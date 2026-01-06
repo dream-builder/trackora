@@ -2,6 +2,7 @@
 import 'package:trackora/Dashboard.dart';
 import 'package:trackora/GoogleMapExample.dart';
 import 'package:trackora/controlers/StudentProfileController.dart';
+import 'package:trackora/drivers/navigaton.dart';
 import 'package:trackora/layout/main_layout.dart';
 import 'package:trackora/students/LiveMapScreen.dart';
 import 'package:trackora/drivers/driverProfile.dart';
@@ -10,6 +11,7 @@ import 'package:trackora/profile.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:trackora/students/Profile.dart';
+import 'package:trackora/students/Register.dart';
 
 
 import 'helpers/sharedPref.dart';
@@ -163,7 +165,7 @@ class _SignInPageState extends State<SignInPage> {
               SizedBox(
 
                 width: double.infinity,
-                height: 55,
+                height: 100,
                 child: // Sign In Button with Loading Overlay
                 Stack(
                   alignment: Alignment.center,
@@ -218,6 +220,37 @@ class _SignInPageState extends State<SignInPage> {
                 ),
 
               ),
+
+              const SizedBox(height: 10),
+              // Sign In text
+              GestureDetector(
+                onTap: () {
+                  // Navigate to Sign In page
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => NavigationScreen() ),
+                  );
+                },
+                child: Column(
+                  children:  [
+                    Text(
+                      "Don't have an account?".tr(),
+                      style: TextStyle(color: Colors.black87),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      "Sign up here".tr(),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+
             ],
           ),
         ),

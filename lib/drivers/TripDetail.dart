@@ -152,7 +152,7 @@ class _FieldTripPageState extends State<FieldTripPage> {
     print("Route-id: ${route_id}");
     //Load the routes by student id
     get_route(route_id);
-
+    get_vehicle_by_route_id(route_id);
     get_student(route_id);
   }
 
@@ -281,9 +281,10 @@ class _FieldTripPageState extends State<FieldTripPage> {
         children: [
           _title("Vehicle Details"),
           const SizedBox(height: 12),
-          _keyValue("Model", "Toyota Corolla CROSS"),
-          _keyValue("License Plate", "DM-TA1-3787"),
-          _keyValue("Vehicle Type", "SUV"),
+          _keyValue("Provider", ""), //Bluebird, Franklin
+          _keyValue("License Plate", ""), //DM-TA1-3787
+          _keyValue("Vehicle Type", ""), //BUS / Van
+
         ],
       ),
     );
@@ -450,6 +451,12 @@ class _FieldTripPageState extends State<FieldTripPage> {
         ),
       ],
     );
+  }
+
+  void get_vehicle_by_route_id(route_id) {
+
+
+
   }
 
 }

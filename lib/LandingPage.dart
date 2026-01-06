@@ -17,28 +17,24 @@ class LandingPage extends StatelessWidget {
             // Top Title
             Column(
               children: [
-                const SizedBox(height: 80),
+                const SizedBox(height: 220),
+                // Eagle Logo
+                Image.asset(
+                  "assets/trackora_logo.png", // <-- place your eagle image in assets
+                  height: 130,
+                ),
+                const SizedBox(height: 20),
                 Text(
-                    "School Bus Tracker".tr(),
+                  "School Bus Tracker".tr(),
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 28,
+                    fontSize: 22,
                     fontWeight: FontWeight.bold,
                     color: Colors.deepPurple,
                     letterSpacing: 1.2,
                   ),
                 ),
-                const SizedBox(height: 40),
-
-                // Eagle Logo
-                Image.asset(
-                  "assets/trackora_logo.png", // <-- place your eagle image in assets
-                  height: 140,
-                ),
-
-                const SizedBox(height: 15),
-
-              ],
+                              ],
             ),
 
             // Bottom Buttons & Text
@@ -75,31 +71,9 @@ class LandingPage extends StatelessWidget {
                   ),
                 ),
 
-                const SizedBox(height: 30),
 
-                // Sign In text
-                GestureDetector(
-                  onTap: () {
-                    // Navigate to Sign In page
-                  },
-                  child: Column(
-                    children:  [
-                      Text(
-                        "Don't have an account?".tr(),
-                        style: TextStyle(color: Colors.black87),
-                      ),
-                      SizedBox(height: 4),
-                      Text(
-                        "Sign in here".tr(),
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+
+
                 const SizedBox(height: 40),
               ],
             ),
