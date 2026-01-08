@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "102505526157",
+    "firebase_url": "https://school-bus-tracket-default-rtdb.firebaseio.com",
+    "project_id": "school-bus-tracket",
+    "storage_bucket": "school-bus-tracket.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:102505526157:android:7846f7810a23be942fc3c4",
+        "android_client_info": {
+          "package_name": "ca.trackora"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "102505526157-nacet7ng4m1as6g8tgk5itgd9iojbfor.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsggmL15qtHcMoc5pMJ_mtkY_P7Swqt8w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "102505526157-nacet7ng4m1as6g8tgk5itgd9iojbfor.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:102505526157:android:aa6fe411df7c9bc52fc3c4",
+        "android_client_info": {
+          "package_name": "ca.trackora.trackora"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "102505526157-nacet7ng4m1as6g8tgk5itgd9iojbfor.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsggmL15qtHcMoc5pMJ_mtkY_P7Swqt8w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "102505526157-nacet7ng4m1as6g8tgk5itgd9iojbfor.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:102505526157:android:e1a6c92220f6b5182fc3c4",
+        "android_client_info": {
+          "package_name": "com.mdshahed.tracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "102505526157-nacet7ng4m1as6g8tgk5itgd9iojbfor.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsggmL15qtHcMoc5pMJ_mtkY_P7Swqt8w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "102505526157-nacet7ng4m1as6g8tgk5itgd9iojbfor.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
