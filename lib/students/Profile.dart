@@ -1,11 +1,14 @@
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 //import 'package:trackora/controlers/StudentProfileController.dart';
 import 'package:trackora/helpers/StringHelper.dart';
+import 'package:trackora/students/LiveMapScreen.dart';
 
 import '../helpers/camera_helper.dart';
 import '../helpers/sharedPref.dart';
+import '../layout/SideBarMenu.dart';
 
 class AppTheme {
   static const Color primary = Color(0xFF00A7A7);
@@ -72,7 +75,18 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(),
+
+
+      appBar: AppBar(
+        title:  Text("Profile".tr()),
+
+        backgroundColor: Colors.deepOrange,
+        foregroundColor:Colors.white,
+      ),
+      drawer: AppSidebar(
+        context: context, accountName: 'Shahed', accountEmail: 'email',
+      ),
+
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -132,7 +146,32 @@ class _ProfilePageState extends State<ProfilePage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children:  [
-            _RoleChip("${capitalizeFirst(studentProfile?['role']??'')}"),
+            //_RoleChip("${capitalizeFirst(studentProfile?['role']??'')}"),
+            ElevatedButton(
+              onPressed: () {
+                // 👉 click action here
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LiveMapScreen() ),
+                );
+                // example: open dialog / navigate / change role
+              },
+
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF00A7A7),
+                foregroundColor: Colors.white,
+                elevation: 0,
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+              ),
+              child: Text("Go live!".tr(),
+                style: const TextStyle(fontSize: 13),
+              ),
+            ),
+            const SizedBox(width: 8),
+
             SizedBox(width: 8),
 
           ],

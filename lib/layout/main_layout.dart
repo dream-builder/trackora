@@ -179,14 +179,14 @@ class _MainLayoutState extends State<MainLayout> {
       //       builder: (_, provider, __) => Text(provider.title),
       //     ),
       //   )
-      appBar: AppBar(
-        //title:  Text(_appBarTitle),
-        title: Consumer<AppBarTitleProvider>(
-                builder: (_, provider, __) => Text(provider.title),
-              ),
-        backgroundColor: _baseColor,
-        foregroundColor:Colors.white,
-      ),
+      // appBar: AppBar(
+      //   //title:  Text(_appBarTitle),
+      //   title: Consumer<AppBarTitleProvider>(
+      //           builder: (_, provider, __) => Text(provider.title),
+      //         ),
+      //   backgroundColor: _baseColor,
+      //   foregroundColor:Colors.white,
+      // ),
 
       // 🔹 NAVIGATION DRAWER
       drawer: Drawer(
@@ -217,34 +217,34 @@ class _MainLayoutState extends State<MainLayout> {
       body: _buildPage(_currentIndex),
 
       // 🔹 FIXED BOTTOM BAR
-        bottomNavigationBar: NavigationBarTheme(
-          data: NavigationBarThemeData(
-            iconTheme: MaterialStateProperty.resolveWith<IconThemeData>(
-                  (states) {
-                if (states.contains(MaterialState.selected)) {
-                  return const IconThemeData(color: AppColors.student); // selected
-                }
-                return const IconThemeData(color: Colors.grey); // unselected
-              },
-            ),
-          ),
-          child: NavigationBar(
-            labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
-            selectedIndex: _currentIndex,
-            onDestinationSelected: (index) {
-              context.read<PageProvider>().changePage(0);
-              if(index<=2){
-                setState(() => _currentIndex = index);
-
-              }
-              else if(index == 3){
-                logout(context);
-              }
-
-            },
-            destinations: buildNavDestinations(),
-          ),
-        ),
+      //   bottomNavigationBar: NavigationBarTheme(
+      //     data: NavigationBarThemeData(
+      //       iconTheme: MaterialStateProperty.resolveWith<IconThemeData>(
+      //             (states) {
+      //           if (states.contains(MaterialState.selected)) {
+      //             return const IconThemeData(color: AppColors.student); // selected
+      //           }
+      //           return const IconThemeData(color: Colors.grey); // unselected
+      //         },
+      //       ),
+      //     ),
+      //     child: NavigationBar(
+      //       labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+      //       selectedIndex: _currentIndex,
+      //       onDestinationSelected: (index) {
+      //         context.read<PageProvider>().changePage(0);
+      //         if(index<=2){
+      //           setState(() => _currentIndex = index);
+      //
+      //         }
+      //         else if(index == 3){
+      //           logout(context);
+      //         }
+      //
+      //       },
+      //       destinations: buildNavDestinations(),
+      //     ),
+      //   ),
 
     );
   }

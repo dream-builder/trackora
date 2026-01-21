@@ -22,6 +22,7 @@ import '../helpers/get_route_info_by_student_id.dart';
 import '../helpers/notification_service.dart';
 import '../helpers/sharedPref.dart';
 import '../helpers/sound_helper.dart';
+import '../layout/SideBarMenu.dart';
 import '../provider/AppBarTitleProvider.dart';
 
 
@@ -384,7 +385,25 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
     _updateSchoolBusMarker(newPos);
 
   }
+  void handleMenu(BuildContext context, String key) {
+    Navigator.pop(context); // close drawer
 
+    if (key == "dashboard") {
+      print("Dashboard clicked");
+    }
+
+    if (key == "users") {
+      print("Users clicked");
+    }
+
+    if (key == "settings") {
+      print("Settings clicked");
+    }
+
+    if (key == "logout") {
+      print("Logout clicked");
+    }
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -491,20 +510,23 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
 ''';
 
     return Scaffold(
-      // appBar: AppBar(title: Row(
-      //   children: [
-      //     // Image.asset(
-      //     //   "assets/trackora_logo.png", // your custom icon path
-      //     //   height: 28,
-      //     //   width: 28,
-      //     // ), // your icon
-      //     // const SizedBox(width: 8),
-      //     const Text("Driver Live", style: TextStyle(color: Colors.white)),
-      //   ],
-      // ),
-      //   backgroundColor: Color(0xFFFF6600), // 👈 change color here
-      //   elevation: 0,
-      // ),
+      appBar: AppBar(title: Row(
+        children: [
+          // Image.asset(
+          //   "assets/trackora_logo.png", // your custom icon path
+          //   height: 28,
+          //   width: 28,
+          // ), // your icon
+          // const SizedBox(width: 8),
+          const Text("Driver Live", style: TextStyle(color: Colors.white)),
+        ],
+      ),
+        backgroundColor: Color(0xFFFF6600), // 👈 change color here
+        elevation: 0,
+      ),
+      drawer: AppSidebar(
+        context: context, accountName: 'Shahed', accountEmail: 'email',
+      ),
       body: SafeArea(child:
 
       Stack(

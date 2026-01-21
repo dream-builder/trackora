@@ -6,12 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
+import 'package:trackora/drivers/DriverLiveScreen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../config/config.dart';
 import '../helpers/getRouteByID.dart';
 import '../helpers/getRouteWithWaypoints.dart';
 import '../helpers/sharedPref.dart';
+import '../layout/SideBarMenu.dart';
 import '../provider/AppBarTitleProvider.dart';
 import '../provider/PageProvider.dart';
 
@@ -172,8 +174,16 @@ class _FieldTripPageState extends State<FieldTripPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title:  Text("Trip Detail".tr()),
+
+        backgroundColor: Colors.deepOrange,
+        foregroundColor:Colors.white,
+      ),
       backgroundColor: const Color(0xFFF5F6FA),
-      
+      drawer: AppSidebar(
+        context: context, accountName: 'Shahed', accountEmail: 'email',
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -206,7 +216,12 @@ class _FieldTripPageState extends State<FieldTripPage> {
           ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
 
             onPressed: (){
-            context.read<PageProvider>().changePage(2); //Load Live screen index 2
+            //context.read<PageProvider>().changePage(2); //Load Live screen index 2
+              // Navigate to next page
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => DriverliveScreen()),
+              );
           },
               child: const Text(
                 "Start Travel",

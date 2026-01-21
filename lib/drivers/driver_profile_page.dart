@@ -6,8 +6,10 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:trackora/drivers/TripDetail.dart';
 import '../config/config.dart';
+import '../helpers/AppColors.dart';
 import '../helpers/sharedPref.dart';
-import '../provider/AppBarTitleProvider.dart';
+import '../layout/SideBarMenu.dart';
+// import '../provider/AppBarTitleProvider.dart';
 import '../provider/PageProvider.dart';
 import 'DriverLiveScreen.dart';
 
@@ -22,14 +24,12 @@ class _DriverProfilePageState extends State<DriverProfilePage> {
   int selectedTab = 2; // 0=Basic, 1=License, 2=Route
   Map<String, dynamic>? userData;
   List<Map<String, dynamic>> routeList = [];
+  Color? _baseColor = AppColors.student;
 
   void checkLoginData() async {
     Map<String, dynamic> data = await loadLoginData();
     setState(() {
       userData = data;
-
-      print("Saved Shared Preference");
-      print ("User Data1: ${userData!['user_data']}");
 
       //Loading route list
       fetchrouteList(userData!['user_data']['driver_id']);
@@ -83,16 +83,44 @@ class _DriverProfilePageState extends State<DriverProfilePage> {
     checkLoginData();
 
 
-    // 🔔 Set title when page loads
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<AppBarTitleProvider>().updateTitle("Profile".tr());
-    });
+    // // 🔔 Set title when page loads
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   context.read<AppBarTitleProvider>().updateTitle("Profile".tr());
+    // });
+  }
+  void handleMenu(BuildContext context, String key) {
+    Navigator.pop(context); // close drawer
+
+    if (key == "dashboard") {
+      print("Dashboard clicked");
+    }
+
+    if (key == "users") {
+      print("Users clicked");
+    }
+
+    if (key == "settings") {
+      print("Settings clicked");
+    }
+
+    if (key == "logout") {
+      print("Logout clicked");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title:  Text("Profile".tr()),
+
+        backgroundColor: Colors.deepOrange,
+        foregroundColor:Colors.white,
+      ),
+      drawer: AppSidebar(
+        context: context, accountName: 'Shahed', accountEmail: 'email',
+      ),
+      //backgroundColor: Colors.white,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -439,13 +467,15 @@ class _DriverProfilePageState extends State<DriverProfilePage> {
 
                 if (success) {
 
-                  context.read<PageProvider>().changePage(1);
+                  //Uncomment bellow line to use bottom navigation
+                  //context.read<PageProvider>().changePage(1);
+
                   //loading driver live activity
-                  // Navigator.push(
-                  //   context,
-                  //   //_currentIndex=1
-                  //   MaterialPageRoute(builder: (context) => FieldTripPage()),
-                  // );
+                  Navigator.push(
+                    context,
+                    //_currentIndex=1
+                    MaterialPageRoute(builder: (context) => FieldTripPage()),
+                  );
                 }else{
                   print("not saved");
                 }

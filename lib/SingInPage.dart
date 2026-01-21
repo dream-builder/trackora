@@ -2,6 +2,7 @@
 import 'package:trackora/Dashboard.dart';
 import 'package:trackora/GoogleMapExample.dart';
 import 'package:trackora/controlers/StudentProfileController.dart';
+import 'package:trackora/drivers/driver_profile_page.dart';
 import 'package:trackora/drivers/navigaton.dart';
 import 'package:trackora/layout/main_layout.dart';
 import 'package:trackora/students/LiveMapScreen.dart';
@@ -14,6 +15,7 @@ import 'package:trackora/students/Profile.dart';
 import 'package:trackora/students/Register.dart';
 
 
+import 'helpers/firebase_user_service.dart';
 import 'helpers/sharedPref.dart';
 import 'login.dart';
 
@@ -42,12 +44,31 @@ class _SignInPageState extends State<SignInPage> {
       );
     }
     print("login test $login");
+
+    //Firebase test data
+    final firebaseService = FirebaseUserService();
+
+    await firebaseService.updateUser(
+      userId: 'user_001',
+      name: 'Shahed Chaklader',
+      lat: 23.8103,
+      lng: 90.4125,
+      status: 'online',
+    );
+
+    final userData = await firebaseService.getUser('user_001');
+
+    if (userData != null) {
+      print("Firebase");
+      print(userData['name']);
+      print(userData['lat']);
+    }
   }
 
   @override
   void initState() {
 
-    init();
+    //init();
 
     // TODO: implement initState
     super.initState();
@@ -228,7 +249,7 @@ class _SignInPageState extends State<SignInPage> {
                   // Navigate to Sign In page
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => NavigationScreen() ),
+                    MaterialPageRoute(builder: (context) => RegisterPage() ),
                   );
                 },
                 child: Column(
@@ -271,14 +292,14 @@ class _SignInPageState extends State<SignInPage> {
     if(data['role']=="driver"){
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => MainLayout() ),
+        MaterialPageRoute(builder: (context) => DriverProfilePage() ),
       );
     }
 
     if(data['role']=="student"){
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => MainLayout() ),
+        MaterialPageRoute(builder: (context) => ProfilePage()  ),
       );
     }
 
