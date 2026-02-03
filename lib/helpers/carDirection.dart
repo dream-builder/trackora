@@ -34,22 +34,3 @@ Marker updateMovingMarker({
     flatParam: true,
   );
 }
-
-// /// Update car marker with new location & direction
-// void _updateCarLocation(LatLng newPosition, LatLng lastPosition) {
-//   final bearing = getBearing(lastPosition, newPosition);
-//
-//   setState(() {
-//     _carMarker = _carMarker!.copyWith(
-//       positionParam: newPosition,
-//       rotationParam: bearing,
-//     );
-//   });
-//
-//   _mapController?.animateCamera(
-//     CameraUpdate.newLatLng(newPosition),
-//   );
-//
-//   _lastPosition = newPosition;
-//   _lastRotation = bearing;
-// }

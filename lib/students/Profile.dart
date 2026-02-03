@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:trackora/controlers/StudentProfileController.dart';
 import 'package:trackora/helpers/StringHelper.dart';
 import 'package:trackora/students/LiveMapScreen.dart';
@@ -45,8 +46,16 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<void> init() async {
     Map<String, dynamic>?profile = await loadLoginData();
 
+    //Load saved user image for profile
+    final prefs = await SharedPreferences.getInstance();
+
+    imagePath=prefs.getString('user_image').toString();
+
+    print("saved User image path: $imagePath");
+
     setState(() {
       studentProfile = profile;
+
     });
   }
 
@@ -60,14 +69,21 @@ class _ProfilePageState extends State<ProfilePage> {
 
   void captureImage() async {
     final path = await CameraHelper.takePicture();
+    final prefs = await SharedPreferences.getInstance();
+
 
     if (imagePath != null) {
       print("Image saved at: $imagePath");
     }
 
     if (path != null && mounted) {
-      setState(() {
+
+
+      setState(() async {
         imagePath = path;
+        print("Image saved at: $imagePath");
+        //Save path to shared pref
+        await prefs.setString("user_image", imagePath.toString());
       });
     }
   }
@@ -80,7 +96,7 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(
         title:  Text("Profile".tr()),
 
-        backgroundColor: Colors.deepOrange,
+        backgroundColor: Color(0xFF00A7A7),
         foregroundColor:Colors.white,
       ),
       drawer: AppSidebar(

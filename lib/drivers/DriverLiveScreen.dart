@@ -13,6 +13,7 @@ import 'package:http/http.dart' as http;
 import 'package:trackora/config/config.dart';
 import '../helpers/FlutterTTS.dart';
 import '../helpers/GeoFence.dart';
+import '../helpers/LiveLocationManager.dart';
 import '../helpers/carDirection.dart';
 import '../helpers/getCurrentLocation.dart';
 import '../helpers/getDistanceAndTime.dart';
@@ -98,7 +99,6 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
   String _routeName = "Route name";
   String distanceLabel = "";
 
-
   bool _useLiveLocation = false;
   LatLng? _busLocation;
   LatLng? _userLocation;
@@ -109,18 +109,19 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
   Set<Circle> _circles = {};
 
   List<Map<String, dynamic>> studentList = []; //{"name": "Student A", "status": "Active", "id": 1, "pickup_point":{"latitude":23.9484764, "longitude":90.232546545}},
-
   bool isEnabledPickup = false;
-
   bool _isLoading = true;
 
   double carBearing = 0;
   double _currentZoom = 13.0; // default zoom
 
-
   List<NavStep> _steps = [];
   int _currentStepIndex = 0;
   bool isStarted = false;
+
+  int driver_id=0;
+  int route_id = 0;
+
 
   /// Load image from assets and convert to BitmapDescriptor
   // Future<void> _loadCustomMarker() async {
@@ -188,7 +189,7 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
           _fetchAndUpdateMarkerDemo();
         }else{
           //School bus live location
-          _updateSchoolBusPosition();
+          _updateSchoolBusLivePosition();
         }
 
       });
@@ -621,7 +622,7 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
             top: 20,
             left: 20,
             child: FloatingActionButton(
-              backgroundColor: isStarted ? Colors.red : Colors.black,
+              backgroundColor: isStarted ? Colors.black87 : Colors.deepOrange,
               onPressed: startTravle,
               child:  Icon(
                 isStarted ? Icons.stop : Icons.play_arrow,
@@ -925,36 +926,52 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
 
   void load_bootstrap_data() async {
     //set route id to shared pref
-    final route_id = await getSharedPref("route_id");
+    // route_id = await getSharedPref("route_id");
 
-    print("Route-id: ${route_id}");
-    //Load the routes by student id
+    //Get login user information
+    final data = await getSavedUserInfo();
+
+    userData = jsonDecode(data);
+
+    final routeid = await getSharedPref("route_id");
+    route_id = routeid;
+
+    print ("Userinfo ${userData}");
+
     get_route(route_id);
-
     get_student(route_id);
   }
 
-  Future<void> _updateSchoolBusPosition() async {
+  Future<void> _updateSchoolBusLivePosition() async {
     try {
       var location = await getCurrentLocation();
       print("School Bus Live Location");
-      print("Latitude: ${location['latitude']}, Longitude: ${location['longitude']}");
+      //print("Latitude: ${location['latitude']}, Longitude: ${location['longitude']}");
 
-      //_userLocation = LatLng(location['latitude']!, location['longitude']!);
-
-      //print("School Bus Locaion: ${_userLocation}");
+      //Update Driver Live Location
+      await setLiveLocation(
+        lat: location['latitude']!.toDouble(),
+        lng: location['longitude']!.toDouble(),
+        user_id:  userData!['driver_id'],
+        route_id: route_id.toDouble(),
+        speed: location["speed"]!.toDouble(),
+        bearing: location["bearing"]!.toDouble(),
+      );
 
       LatLng newPosition = LatLng((location['latitude'] as num).toDouble(), (location['longitude'] as num).toDouble());
 
       //_updateSchoolBusMarker(newPosition);
 
-      await animateCameraSmoothly(
-        from: _lastPosition,
-        to: newPosition,
-        zoom: _currentZoom,
-        bearing: carBearing,
-        duration: const Duration(seconds: 5),
-      );
+      // await animateCameraSmoothly(
+      //   from: _lastPosition,
+      //   to: newPosition,
+      //   zoom: _currentZoom,
+      //   bearing: carBearing,
+      //   duration: const Duration(seconds: 5),
+      // );
+
+      //Update marker on Map
+      _updateSchoolBusMarker(newPosition);
 
     } catch (e) {
       print("Error: $e");

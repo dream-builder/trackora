@@ -8,4 +8,4 @@ const bool trafficEnabled = false; // When true, Google map will show traffic on
 final LatLng initialPosition = LatLng(45.4631641, -73.4274669); // Dhaka default
 const bool showStartEndMarker = false;
 const int timeOut=5; // call every 5 seconds
-bool demoMode = true;
+bool demoMode = false;

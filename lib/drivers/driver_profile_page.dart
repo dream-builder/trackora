@@ -24,7 +24,7 @@ class _DriverProfilePageState extends State<DriverProfilePage> {
   int selectedTab = 2; // 0=Basic, 1=License, 2=Route
   Map<String, dynamic>? userData;
   List<Map<String, dynamic>> routeList = [];
-  Color? _baseColor = AppColors.student;
+  //Color? _baseColor = AppColors.student;
 
   void checkLoginData() async {
     Map<String, dynamic> data = await loadLoginData();
@@ -68,6 +68,7 @@ class _DriverProfilePageState extends State<DriverProfilePage> {
       if (response.statusCode == 200) {
         List<dynamic> data = jsonDecode(response.body);
         updateRouteList(data);
+        print("route Data: ${data}");
       }
     } catch (e) {
 

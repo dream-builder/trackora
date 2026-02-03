@@ -28,8 +28,11 @@ Future<Map<String, double>> getCurrentLocation() async {
     desiredAccuracy: LocationAccuracy.high,
   );
 
+  print ("All position info: ${position}");
   return {
     "latitude": position.latitude,
     "longitude": position.longitude,
+    "speed": position.speed,
+    "bearing": position.heading,
   };
 }

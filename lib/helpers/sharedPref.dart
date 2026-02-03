@@ -83,3 +83,11 @@ Future<dynamic> getSharedPref(String key) async{
     return null;
   }
 }
+Future<dynamic> getSavedUserInfo() async{
+  try{
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.get('user_data');
+  }catch(e){
+    return null;
+  }
+}
