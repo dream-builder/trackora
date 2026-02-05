@@ -1,5 +1,5 @@
 
-import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:trackora/pages/map_page.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -20,7 +20,7 @@ Future<void> main() async {
   await requestNotificationPermission();
   await requestLocationPermission();
   await EasyLocalization.ensureInitialized();
-  await Firebase.initializeApp();
+  //await Firebase.initializeApp();
 
   runApp(
       EasyLocalization(
