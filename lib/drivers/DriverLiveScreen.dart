@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:trackora/config/config.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 import '../helpers/FlutterTTS.dart';
 import '../helpers/GeoFence.dart';
 import '../helpers/LiveLocationManager.dart';
@@ -156,12 +157,15 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
     //***************************************
     //TIMER IS DISABLED TEPORARILY FOR TESTING. IN PRODUCTION IT WILL BE UNCOMENTED
 
+    //Keep screen on while this activity is open
+    WakelockPlus.enable(); // 🔥 keep screen ON
   }
 
   @override
   void dispose() {
     _timer?.cancel();
     _mapController?.dispose();
+    WakelockPlus.disable(); // 💤 allow screen to turn OFF again
     super.dispose();
   }
 
@@ -304,7 +308,7 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
 
     setState(() {
 
-      _addMarker(newPosition, title: "School Bus", markerId:"school-bus",icon: 4);
+      _addMarker(newPosition, title: "School Bus", markerId:"school-bus",icon: 1);
 
 
 

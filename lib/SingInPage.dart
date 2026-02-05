@@ -46,29 +46,32 @@ class _SignInPageState extends State<SignInPage> {
     print("login test $login");
 
     //Firebase test data
-    final firebaseService = FirebaseUserService();
 
-    await firebaseService.updateUser(
-      userId: 'user_001',
-      name: 'Shahed Chaklader',
-      lat: 23.8103,
-      lng: 90.4125,
-      status: 'online',
-    );
-
-    final userData = await firebaseService.getUser('user_001');
-
-    if (userData != null) {
-      print("Firebase");
-      print(userData['name']);
-      print(userData['lat']);
-    }
+    //#************************* Diasable Firebase
+    // final firebaseService = FirebaseUserService();
+    //
+    // await firebaseService.updateUser(
+    //   userId: 'user_001',
+    //   name: 'Shahed Chaklader',
+    //   lat: 23.8103,
+    //   lng: 90.4125,
+    //   status: 'online',
+    // );
+    //
+    // final userData = await firebaseService.getUser('user_001');
+    //
+    // if (userData != null) {
+    //   print("Firebase");
+    //   print(userData['name']);
+    //   print(userData['lat']);
+    // }
+    //#************************* Diasable Firebase
   }
 
   @override
   void initState() {
 
-    //init();
+    init();
 
     // TODO: implement initState
     super.initState();

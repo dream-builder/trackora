@@ -102,8 +102,11 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
   String _driverName="";
   String _busRegistrationNumber="";
   String _driverPhone="";
-
+  var _driverId;
   bool showSidebar = false;
+  double carBearing = 0;
+
+
 
   void toggleSidebar() {
     setState(() {
@@ -154,14 +157,10 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
   // Step 1: Fetch geo location from API
   Future<LatLng> _fetchLocationFromApi() async {
 
-    String apiUrl = "${apiBaseUrl}api/livemaploc";
+    //String apiUrl = "${apiBaseUrl}api/livemaploc"; old API
+    String apiUrl = "${apiBaseUrl}api/location/${_driverId}";
 
-    final uri = Uri.parse(apiUrl).replace(queryParameters: {
-      "user_id": "1",
-      "driver_id": "1",
-      "bus_id": "1",
-      "route_id": "1",
-    });
+    final uri = Uri.parse(apiUrl);
 
     try {
       // Dummy API (replace with your real API)
@@ -169,17 +168,33 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
 
       //Debug
       print("➡️ Sending GET request: $uri");
-
+      print ("response ${response.statusCode}");
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        double lat = data["latitude"];
-        double lng = data["longitude"];
+        print ("response body : ${data}");
 
+        // print("Got Location ${data}");
+        double lat = data["lat"] is num
+            ? data["lat"].toDouble()
+            : double.tryParse(data["lat"].toString()) ?? 0.0;
+
+        double lng = data["lng"] is num
+            ? data["lng"].toDouble()
+            : double.tryParse(data["lng"].toString()) ?? 0.0;
+
+        double carDirection = data["bearing"] is num
+            ? data["bearing"].toDouble()
+            : double.tryParse(data["bearing"].toString()) ?? 0.0;
+
+        //update global card direction variable
+        carBearing = carDirection;
+
+        print("Lat Lng : ${lat} , ${lng}");
 
         //_getUserDefaultLocation();
 
         //Get the Distance and time
-        _busLocation = LatLng(lat, lng); // Dhaka
+        //_busLocation = LatLng(lat, lng); // Dhaka
         //_userLocation = LatLng(45.4631641, -73.4274669); // start
         //print(response.body);
 
@@ -200,10 +215,10 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
          }
 
 
-        fetchData();
+        //fetchData();
 
 
-        return LatLng(lat, lng);
+        return LatLng(lat.toDouble(), lng.toDouble());
       } else {
         throw Exception("Failed to load location");
       }
@@ -550,24 +565,11 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
 
       locationJson = userData!['pickup_point'];
 
-      // double lat = double.parse(locationJson!['latitude'].toString());
-      // double lng = double.parse(locationJson!['longitude'].toString());
 
       //Set user default location getting form the database
       userDefaultPickupLocation = LatLng(locationJson['latitude'], locationJson['longitude']);
 
       print("Debug - User default location: ${userDefaultPickupLocation}");
-
-      //load user icon
-      // if(_useLiveLocation==false){
-      //   _addMarker(userDefaultPickupLocation!, title: "Student", markerId: "student",icon: 2);
-      //
-      //   //Showing GeoFence
-      //   _circles.add(
-      //     createGeofenceCircle(center: userDefaultPickupLocation!, radius: 300, id: "Student"),
-      //   );
-      // }
-
 
     });
   }
@@ -600,56 +602,6 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
 
   }
 
-
-  //this function will load the routes to MAP
-  // Future<void> loadRoute(LatLng start, LatLng end, List<LatLng> waypoints) async {
-  //
-  //
-  //   // LatLng start = LatLng(23.759654273685218, 90.41905309662167);  // Dhaka
-  //   // LatLng end = LatLng(23.76333006323084, 90.38534018312988);    // Destination
-  //   // List<LatLng> waypoints=[];
-  //
-  //   //get lat nlg from address
-  //   try {
-  //     LatLng result = await getLatLngFromAddress(
-  //       address: "Gulshan 1,Dhaka",
-  //       googleApiKey: googleApiKey,
-  //     );
-  //
-  //     print("Latitude: ${result.latitude}, Longitude: ${result.longitude}");
-  //
-  //     waypoints.add(LatLng(result.latitude, result.longitude));               // Example waypoint
-  //       //LatLng(23.75339969602647, 90.39185962132213),               // Another waypoint
-  //
-  //
-  //   } catch (e) {
-  //     print("Error: $e");
-  //   }
-  //
-  //
-  //
-  //   try {
-  //     List<LatLng> route = await getRouteWithWaypoints(
-  //       start: start,
-  //       end: end,
-  //       waypoints:  waypoints,
-  //       googleApiKey: googleApiKey ,
-  //     );
-  //
-  //     // Now use this route for Polyline
-  //     setState(() {
-  //       _polylines.add(Polyline(
-  //         polylineId: PolylineId("custom_route"),
-  //         color: Colors.purpleAccent,
-  //         width: 6,
-  //         points: route,
-  //       ));
-  //     });
-  //   } catch (e) {
-  //     print("Error: $e");
-  //   }
-  // }
-
   Future<void> get_route_by_student_id(int student_id) async {
 
     LatLng start;  // Dhaka
@@ -671,6 +623,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
       _routeName = routeData["route_name"];
       _busName = "";
       _driverName=routeData["driver_name"];
+      _driverId= routeData["driver_id"];
       _busRegistrationNumber="";
       _driverPhone=routeData["driver_phone"];
 
@@ -738,7 +691,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
         String title = "Marker",
         String? markerId, // optional marker ID
         int? icon=1, //optional icon ID 1=Marker, 2= Male student, 3= Female Student, 4= Bus
-       }) async {
+      }) async {
 
 
     final customIcon = await _getCustomIcon(icon as int);
@@ -748,12 +701,18 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
       position: position,
       infoWindow: InfoWindow(title: title),
       icon: customIcon, //BitmapDescriptor.defaultMarker,
+      anchor: const Offset(0.5, 0.5), // center of the icon
+      flat: true, // important for rotation
+      rotation: carBearing, // heading/direction of the car
+
     );
 
     setState(() {
       _markers.add(marker);
+      print("car Bearing: ${carBearing}");
     });
   }
+
 
   Future<BitmapDescriptor> _getCustomIcon(int icon) async {
 
@@ -772,7 +731,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
       case 4:
         return await BitmapDescriptor.asset(
           const ImageConfiguration(size: Size(24, 24)), // optional size
-          'assets/school_bus.png',
+          'assets/car_top.png',
         );
         break;
     }
