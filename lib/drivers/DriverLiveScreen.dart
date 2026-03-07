@@ -17,7 +17,7 @@ import '../helpers/GeoFence.dart';
 import '../helpers/LiveLocationManager.dart';
 import '../helpers/carDirection.dart';
 import '../helpers/getCurrentLocation.dart';
-import '../helpers/getDistanceAndTime.dart';
+import '../helpers/getDistanceAndTime.dart' hide calculateDistance;
 import '../helpers/getRouteByID.dart';
 import '../helpers/getRouteWithWaypoints.dart';
 import '../helpers/get_route_info_by_student_id.dart';
@@ -113,7 +113,7 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
   bool isEnabledPickup = false;
   bool _isLoading = true;
 
-  double carBearing = 0;
+
   double _currentZoom = 13.0; // default zoom
 
   List<NavStep> _steps = [];
@@ -123,6 +123,7 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
   int driver_id=0;
   int route_id = 0;
 
+  double carBearing=0;
 
   /// Load image from assets and convert to BitmapDescriptor
   // Future<void> _loadCustomMarker() async {
@@ -308,8 +309,7 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
 
     setState(() {
 
-      _addMarker(newPosition, title: "School Bus", markerId:"school-bus",icon: 1);
-
+      _addMarker(newPosition, title: "School Bus", markerId:"school-bus",icon: 4);
 
 
       //print("All markers: ${_markers[MarkerId("school-bus")]}");
@@ -343,7 +343,7 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
       ),
     );
 
-    speak("Saifan is waiting in 200 meters");
+
 
   }
 
@@ -977,6 +977,8 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
       //Update marker on Map
       _updateSchoolBusMarker(newPosition);
 
+      _alertStudentPosition(newPosition,newPosition);
+
     } catch (e) {
       print("Error: $e");
     }
@@ -1014,6 +1016,18 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
 
   void update_student_status(int student_id,  String student_name, String status) {
     showToast(message: "Pick me up ${student_id}");
+  }
+
+  void _alertStudentPosition(
+      LatLng source,
+      LatLng destination
+      ) {
+
+    var distance = calculateDistance(source.latitude, source.longitude, destination.latitude, destination.longitude) * 1000 ;
+
+    var msg = "Saifan is waiting in ${distance} meters";
+
+    speak(msg);
   }
 
 }

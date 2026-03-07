@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:trackora/drivers/DriverLiveScreen.dart';
+import 'package:trackora/drivers/bottom_nav.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../config/config.dart';
@@ -29,6 +30,16 @@ class _FieldTripPageState extends State<FieldTripPage> {
   var routeData;
   List<dynamic> stopPoints = [];
   List<Map<String, String>> passengers = [];
+
+  int selectedIndex = 0;
+
+  final List<IconData> navIcons = [
+    Icons.chat_bubble_outline,
+    Icons.search,
+    Icons.access_time,
+    Icons.notifications_none,
+    Icons.person_outline
+  ];
 
 
   void initState() {
@@ -197,7 +208,71 @@ class _FieldTripPageState extends State<FieldTripPage> {
             _vehicleDetailsCard(),
             const SizedBox(height: 12),
             _passengerDetailsCard(),
+
           ],
+        ),
+      ),
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          margin: const EdgeInsets.all(16),
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(40),
+            gradient: const LinearGradient(
+              colors: [
+                Color(0xff5B5B73),
+                Color(0xff3B3B52),
+              ],
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(.3),
+                blurRadius: 10,
+              )
+            ],
+          ),
+
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: List.generate(navIcons.length, (index) {
+
+              bool isActive = selectedIndex == index;
+
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    selectedIndex = index;
+                  });
+                },
+
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 250),
+                      margin: const EdgeInsets.only(bottom: 6),
+                      height: 4,
+                      width: isActive ? 24 : 0,
+                      decoration: BoxDecoration(
+                        color: const Color(0xff8FA8FF),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+
+                    Icon(
+                      navIcons[index],
+                      size: 26,
+                      color: isActive
+                          ? const Color(0xff8FA8FF)
+                          : Colors.white70,
+                    ),
+                  ],
+                ),
+              );
+
+            }),
+          ),
         ),
       ),
     );
@@ -221,6 +296,7 @@ class _FieldTripPageState extends State<FieldTripPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => DriverliveScreen()),
+                // MaterialPageRoute(builder: (context) => BottomNavExample())
               );
           },
               child: const Text(
