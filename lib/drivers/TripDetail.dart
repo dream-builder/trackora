@@ -8,6 +8,8 @@ import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:trackora/drivers/DriverLiveScreen.dart';
 import 'package:trackora/drivers/bottom_nav.dart';
+import 'package:trackora/drivers/driver_profile_page.dart';
+import 'package:trackora/helpers/exitApp.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../config/config.dart';
@@ -31,14 +33,15 @@ class _FieldTripPageState extends State<FieldTripPage> {
   List<dynamic> stopPoints = [];
   List<Map<String, String>> passengers = [];
 
-  int selectedIndex = 0;
+  int selectedIndex = 1;
 
   final List<IconData> navIcons = [
-    Icons.chat_bubble_outline,
-    Icons.search,
-    Icons.access_time,
-    Icons.notifications_none,
-    Icons.person_outline
+    Icons.person_outline,
+    // Icons.chat_bubble_outline,
+    Icons.navigation,
+    // Icons.access_time,
+    Icons.exit_to_app,
+
   ];
 
 
@@ -240,6 +243,9 @@ class _FieldTripPageState extends State<FieldTripPage> {
 
               return GestureDetector(
                 onTap: () {
+
+                  navAction(index);
+
                   setState(() {
                     selectedIndex = index;
                   });
@@ -547,6 +553,31 @@ class _FieldTripPageState extends State<FieldTripPage> {
   void get_vehicle_by_route_id(route_id) {
 
 
+
+  }
+
+  void navAction(int selectedIndex) {
+    print("select index {{$selectedIndex}}");
+    switch (selectedIndex){
+      case 0:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => DriverProfilePage()),
+          // MaterialPageRoute(builder: (context) => BottomNavExample())
+        );
+        break;
+      case 1:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => DriverliveScreen()),
+          // MaterialPageRoute(builder: (context) => BottomNavExample())
+        );
+        break;
+      case 2:
+        exitApp();
+        break;
+
+    }
 
   }
 

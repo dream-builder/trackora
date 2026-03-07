@@ -6,7 +6,7 @@ import 'package:trackora/drivers/driver_profile_page.dart';
 import 'package:trackora/drivers/navigaton.dart';
 import 'package:trackora/layout/main_layout.dart';
 import 'package:trackora/students/LiveMapScreen.dart';
-import 'package:trackora/drivers/driverProfile.dart';
+import 'package:trackora/drivers/driverProfile_depricated.dart';
 import 'package:trackora/pages/SliderSwitchExample.dart';
 import 'package:trackora/profile.dart';
 import 'package:easy_localization/easy_localization.dart';

@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:trackora/drivers/TripDetail.dart';
 import '../config/config.dart';
 import '../helpers/AppColors.dart';
+import '../helpers/exitApp.dart';
 import '../helpers/sharedPref.dart';
 import '../layout/SideBarMenu.dart';
 // import '../provider/AppBarTitleProvider.dart';
@@ -25,6 +26,18 @@ class _DriverProfilePageState extends State<DriverProfilePage> {
   Map<String, dynamic>? userData;
   List<Map<String, dynamic>> routeList = [];
   //Color? _baseColor = AppColors.student;
+
+  //Bottom Nav
+  int selectedIndex = 0;
+  final List<IconData> navIcons = [
+    Icons.person_outline,
+    // Icons.chat_bubble_outline,
+    Icons.navigation,
+    // Icons.access_time,
+    Icons.exit_to_app,
+
+  ];
+
 
   void checkLoginData() async {
     Map<String, dynamic> data = await loadLoginData();
@@ -134,6 +147,89 @@ class _DriverProfilePageState extends State<DriverProfilePage> {
             const SizedBox(height: 20),
             _tabContent(),
           ],
+        ),
+      ),
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          margin: const EdgeInsets.all(16),
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(40),
+            gradient: const LinearGradient(
+              colors: [
+                Color(0xff5B5B73),
+                Color(0xff3B3B52),
+              ],
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(.3),
+                blurRadius: 10,
+              )
+            ],
+          ),
+
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: List.generate(navIcons.length, (index) {
+
+              bool isActive = selectedIndex == index;
+
+              return GestureDetector(
+                onTap: () {
+                  switch (index){
+                    case 0:
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => DriverProfilePage()),
+                        // MaterialPageRoute(builder: (context) => BottomNavExample())
+                      );
+                      break;
+                    case 1:
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => DriverliveScreen()),
+                        // MaterialPageRoute(builder: (context) => BottomNavExample())
+                      );
+                      break;
+                    case 2:
+                      exitApp();
+                      break;
+
+                  }
+                  setState(() {
+                    selectedIndex = index;
+                  });
+                },
+
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 250),
+                      margin: const EdgeInsets.only(bottom: 6),
+                      height: 4,
+                      width: isActive ? 24 : 0,
+                      decoration: BoxDecoration(
+                        color: const Color(0xff8FA8FF),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+
+                    Icon(
+                      navIcons[index],
+                      size: 26,
+                      color: isActive
+                          ? const Color(0xff8FA8FF)
+                          : Colors.white70,
+                    ),
+                  ],
+                ),
+              );
+
+            }),
+          ),
         ),
       ),
     );
@@ -480,11 +576,6 @@ class _DriverProfilePageState extends State<DriverProfilePage> {
                 }else{
                   print("not saved");
                 }
-
-
-
-
-
 
               },
               child: Text("Show".tr(),style:TextStyle(color:Colors.white)),

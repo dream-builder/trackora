@@ -6,7 +6,7 @@ import 'package:trackora/Logout.dart';
 import 'package:trackora/SingInPage.dart';
 import 'package:trackora/drivers/DriverLiveScreen.dart';
 import 'package:trackora/drivers/TripDetail.dart';
-import 'package:trackora/drivers/driverProfile.dart';
+import 'package:trackora/drivers/driverProfile_depricated.dart';
 import 'package:trackora/drivers/driver_profile_page.dart';
 import 'package:trackora/login.dart';
 import 'package:trackora/students/LiveMapScreen.dart';

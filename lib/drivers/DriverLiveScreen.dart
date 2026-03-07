@@ -16,6 +16,7 @@ import '../helpers/FlutterTTS.dart';
 import '../helpers/GeoFence.dart';
 import '../helpers/LiveLocationManager.dart';
 import '../helpers/carDirection.dart';
+import '../helpers/exitApp.dart';
 import '../helpers/getCurrentLocation.dart';
 import '../helpers/getDistanceAndTime.dart' hide calculateDistance;
 import '../helpers/getRouteByID.dart';
@@ -26,6 +27,7 @@ import '../helpers/sharedPref.dart';
 import '../helpers/sound_helper.dart';
 import '../layout/SideBarMenu.dart';
 import '../provider/AppBarTitleProvider.dart';
+import 'driver_profile_page.dart';
 
 
 class _TwoColRow extends StatelessWidget {
@@ -134,6 +136,16 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
   //   setState(() {});
   // }
 
+  int selectedIndex = 1;
+
+  final List<IconData> navIcons = [
+    Icons.person_outline,
+    // Icons.chat_bubble_outline,
+    Icons.navigation,
+    // Icons.access_time,
+    Icons.exit_to_app,
+
+  ];
 
 
   @override
@@ -638,7 +650,89 @@ class _DriverliveScreenState extends State<DriverliveScreen> {
         ],
 
       )),
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          margin: const EdgeInsets.all(16),
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(40),
+            gradient: const LinearGradient(
+              colors: [
+                Color(0xff5B5B73),
+                Color(0xff3B3B52),
+              ],
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(.3),
+                blurRadius: 10,
+              )
+            ],
+          ),
 
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: List.generate(navIcons.length, (index) {
+
+              bool isActive = selectedIndex == index;
+
+              return GestureDetector(
+                onTap: () {
+                  switch (index){
+                    case 0:
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => DriverProfilePage()),
+                        // MaterialPageRoute(builder: (context) => BottomNavExample())
+                      );
+                      break;
+                    case 1:
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => DriverliveScreen()),
+                        // MaterialPageRoute(builder: (context) => BottomNavExample())
+                      );
+                      break;
+                    case 2:
+                      exitApp();
+                      break;
+
+                  }
+                  setState(() {
+                    selectedIndex = index;
+                  });
+                },
+
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 250),
+                      margin: const EdgeInsets.only(bottom: 6),
+                      height: 4,
+                      width: isActive ? 24 : 0,
+                      decoration: BoxDecoration(
+                        color: const Color(0xff8FA8FF),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+
+                    Icon(
+                      navIcons[index],
+                      size: 26,
+                      color: isActive
+                          ? const Color(0xff8FA8FF)
+                          : Colors.white70,
+                    ),
+                  ],
+                ),
+              );
+
+            }),
+          ),
+        ),
+      ),
       // Bottom nav to match the theme
       //   bottomNavigationBar: NavigationBarTheme(
       //     data: NavigationBarThemeData(
